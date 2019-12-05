@@ -8,18 +8,23 @@ namespace GameLife
 {
     class Program
     {
+        static void AddTestCells()
+        {
+            var cells = new CellPoint[] {
+                new CellPoint(1, 1),
+                new CellPoint(1, 2),
+                new CellPoint(2, 1),
+                new CellPoint(2, 2),
+                new CellPoint(5, 5),
+                new CellPoint(5, 6),
+                new CellPoint(5, 7)
+            };
+            GameEngine.AddLivingCells(cells);
+        }
         static void Main(string[] args)
         {
-            GameEngine.AddLivingCell(1, 1);
-            GameEngine.AddLivingCell(1, 2);
-            GameEngine.AddLivingCell(1, 3);
-            GameEngine.AddLivingCell(10, 10);
-            GameEngine.AddLivingCell(10, 11);
-            GameEngine.AddLivingCell(11, 10);
-            GameEngine.AddLivingCell(11, 11);
-            GameEngine.Width = Console.WindowWidth;
-            GameEngine.Height = Console.WindowHeight;
-            GameEngine.Latency = 250;
+            AddTestCells();
+            GameEngine.Latency = 150;
             GameEngine.Run();
         }
     }

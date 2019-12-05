@@ -47,7 +47,8 @@ namespace GameLife
         static public bool StopGame { get; set; } = false;
         static GameEngine()
         {
-
+            Width = Console.WindowWidth;
+            Height = Console.WindowHeight;
         }
         static public bool CellPointCorrect(CellPoint cell) => cell.X >= 0 && cell.X < Width && cell.Y >= 0 && cell.Y < Height;
         static public void AddLivingCells(CellPoint[] cls)
@@ -71,12 +72,8 @@ namespace GameLife
         static public void DrawField(int x = 0, int y = 0)
         {
             Console.CursorVisible = false;
-            Console.Clear();
-            foreach(var cell in cells)
-            {
-                Console.SetCursorPosition(x + cell.X, y + cell.Y);
-                Console.Write('*');
-            }
+            foreach (var cell in cells)
+                GameIO.SetChar(x + cell.X, y + cell.Y, '*');
         }
         static public void CreateNextGeneration()
         {
@@ -120,16 +117,17 @@ namespace GameLife
                 while (!Console.KeyAvailable)
                 {
                         DrawField();
+                        GameIO.Show();
                         if (!StopGame)
                             CreateNextGeneration();
                         Thread.Sleep(Latency);
                 }
                 if (Console.ReadKey(true).KeyChar == ':')
                 {
-                    Console.SetCursorPosition(0, Console.WindowHeight - 1);
-                    Console.CursorVisible = true;
-                    Console.Write(':');
-                    var input = Console.ReadLine();
+                    var input = GameIO.ReadCommand();
+                    // TODO: Refactor
+                    if (input == null)
+                        continue;
                     if (input == "q")
                         break;
                     try
@@ -138,7 +136,7 @@ namespace GameLife
                     }
                     catch (GameCommandsException e)
                     {
-                        Console.WriteLine(e.Message);
+                        
                     }
                 }
             }
