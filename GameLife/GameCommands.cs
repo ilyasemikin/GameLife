@@ -25,6 +25,7 @@ namespace GameLife
                 { "start", StartGame },
                 { "stop", StopGame },
                 { "clear", ClearField },
+                { "place", PlaceFigure },
             };
         }
         static public void TryParseCommand(string input)
@@ -47,10 +48,8 @@ namespace GameLife
                 int x, y;
                 if (!int.TryParse(argv[0], out x) || !int.TryParse(argv[1], out y))
                     throw new GameCommandsException("Incorrect arguments command 'add'");
-                if (x < 0 || x > GameEngine.Width)
-                    throw new GameCommandsException("Incorrect value x");
-                if (y < 0 || y > GameEngine.Height)
-                    throw new GameCommandsException("Incorrect value y");
+                if (!GameEngine.CellPointCorrect(new CellPoint(x, y)))
+                    throw new GameCommandsException("Incorrect coordinate");
                 GameEngine.AddLivingCell(new CellPoint(x, y));
             }
             else
@@ -63,10 +62,8 @@ namespace GameLife
                 int x, y;
                 if (!int.TryParse(argv[0], out x) || !int.TryParse(argv[1], out y))
                     throw new GameCommandsException("Incorrect arguments command 'delete'");
-                if (x < 0 || x > GameEngine.Width)
-                    throw new GameCommandsException("Incorrect value x");
-                if (y < 0 || y > GameEngine.Height)
-                    throw new GameCommandsException("Incorrect value y");
+                if (!GameEngine.CellPointCorrect(new CellPoint(x, y)))
+                    throw new GameCommandsException("Incorrect coordinate");
                 GameEngine.DeleteLivingCell(new CellPoint(x, y));
             }
             else
@@ -92,6 +89,29 @@ namespace GameLife
                 GameEngine.ClearField();
             else
                 throw new GameCommandsException("Command 'clear' not required arguments");
+        }
+
+        static private void PlaceFigure(string[] argv)
+        {
+            if (argv.Length == 3)
+            {
+                var figureName = argv[0];
+                int x, y;
+                if (!int.TryParse(argv[1], out x) || !int.TryParse(argv[2], out y))
+                    throw new GameCommandsException("Incorrect arguments command 'place'");
+                if (!GameEngine.CellPointCorrect(new CellPoint(x, y)))
+                    throw new GameCommandsException("Incorrect cordinate");
+                var figure = GameFigures.SearchFigure(figureName);
+                if (figure == null)
+                    throw new GameCommandsException(string.Format($"Figure {figureName} not exist"));
+                // TODO: Refactor
+                for (int i = 0; i < figure.Length; i++)
+                    figure[i] = (figure[i].Item1 + x, figure[i].Item2 + y);
+                foreach (var item in figure)
+                    GameEngine.AddLivingCell(new CellPoint(item.Item1, item.Item2));
+            }
+            else
+                throw new GameCommandsException("Command 'place' required 3 arguments");
         }
     }
 }

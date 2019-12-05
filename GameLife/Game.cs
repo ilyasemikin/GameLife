@@ -49,6 +49,7 @@ namespace GameLife
         {
 
         }
+        static public bool CellPointCorrect(CellPoint cell) => cell.X >= 0 && cell.X < Width && cell.Y >= 0 && cell.Y < Height;
         static public void AddLivingCells(CellPoint[] cls)
         {
             foreach (var cell in cls)
@@ -56,28 +57,16 @@ namespace GameLife
         }
         static public void AddLivingCell(CellPoint cell)
         {
-            if (!cells.Contains(cell))
+            if (!cells.Contains(cell) && CellPointCorrect(cell))
                 cells.Add(cell);
         }
-        static public void AddLivingCell(int x, int y)
-        {
-            cells.Add(new CellPoint(x, y));
-        }
+        static public void AddLivingCell(int x, int y) => cells.Add(new CellPoint(x, y));
 
-        static public void DeleteLivingCell(CellPoint cell)
-        {
-            cells.Remove(cell);
-        }
+        static public void DeleteLivingCell(CellPoint cell) => cells.Remove(cell);
 
-        static public void DeleteLivingCell(int x, int y)
-        {
-            DeleteLivingCell(new CellPoint(x, y));
-        }
+        static public void DeleteLivingCell(int x, int y) => DeleteLivingCell(new CellPoint(x, y));
 
-        static public void ClearField()
-        {
-            cells.Clear();
-        }
+        static public void ClearField() => cells.Clear();
 
         static public void DrawField(int x = 0, int y = 0)
         {
