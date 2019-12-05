@@ -20,7 +20,7 @@ namespace GameLife
         }
         public override bool Equals(object obj)
         {
-            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            if ((obj == null) || !GetType().Equals(obj.GetType()))
             {
                 return false;
             }
@@ -44,25 +44,44 @@ namespace GameLife
             get => _latency;
             set => _latency = (value > 10) ? value : 500;
         }
+        static public bool StopGame { get; set; } = false;
         static GameEngine()
         {
-            Console.CursorVisible = false;
+
         }
         static public void AddLivingCells(CellPoint[] cls)
         {
-            cells.AddRange(cls);
+            foreach (var cell in cls)
+                AddLivingCell(cell);
         }
         static public void AddLivingCell(CellPoint cell)
         {
-            cells.Add(cell);
+            if (!cells.Contains(cell))
+                cells.Add(cell);
         }
         static public void AddLivingCell(int x, int y)
         {
             cells.Add(new CellPoint(x, y));
         }
 
+        static public void DeleteLivingCell(CellPoint cell)
+        {
+            cells.Remove(cell);
+        }
+
+        static public void DeleteLivingCell(int x, int y)
+        {
+            DeleteLivingCell(new CellPoint(x, y));
+        }
+
+        static public void ClearField()
+        {
+            cells.Clear();
+        }
+
         static public void DrawField(int x = 0, int y = 0)
         {
+            Console.CursorVisible = false;
             Console.Clear();
             foreach(var cell in cells)
             {
@@ -107,15 +126,33 @@ namespace GameLife
         }
         static public void Run()
         {
-            do
+            while (true)
             {
                 while (!Console.KeyAvailable)
                 {
-                    DrawField();
-                    CreateNextGeneration();
-                    Thread.Sleep(Latency);
+                        DrawField();
+                        if (!StopGame)
+                            CreateNextGeneration();
+                        Thread.Sleep(Latency);
                 }
-            } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
+                if (Console.ReadKey(true).KeyChar == ':')
+                {
+                    Console.SetCursorPosition(0, Console.WindowHeight - 1);
+                    Console.CursorVisible = true;
+                    Console.Write(':');
+                    var input = Console.ReadLine();
+                    if (input == "q")
+                        break;
+                    try
+                    {
+                        GameCommands.TryParseCommand(input);
+                    }
+                    catch (GameCommandsException e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                }
+            }
         }
     }
 }
