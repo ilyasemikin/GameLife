@@ -52,8 +52,7 @@ namespace GameLife
             for (int y = 0; y < Height - 2; y++)
             {
                 Console.SetCursorPosition(0, y);
-                for (int x = 0; x < Width; x++)
-                    Console.Write(matrix.GetChar(x, y));
+                Console.Write(matrix.GetLine(y));
             }
             Console.SetCursorPosition(0, 0);
         }
@@ -78,7 +77,7 @@ namespace GameLife
         static public ConsoleColor DefaultMessageForegroundColor { get; set; }
         static private GameMessage Message { get; set; }
         static private int MessageShowedTicks { get; set; }
-        static public void SetMessage(GameMessage message, int ticks = 5)
+        static public void SetMessage(GameMessage message, int ticks = 15)
         {
             MessageShowedTicks = ticks;
             Message = message;
