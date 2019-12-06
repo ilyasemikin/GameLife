@@ -117,7 +117,7 @@ namespace GameLife
                 while (!Console.KeyAvailable)
                 {
                         DrawField();
-                        GameIO.Show();
+                        GameIO.Write();
                         if (!StopGame)
                             CreateNextGeneration();
                         Thread.Sleep(Latency);
