@@ -15,34 +15,25 @@ namespace GameLife
     }
     static class GameIO
     {
-        static public int Width { get; private set; }
-        static public int Height { get; private set; }
+        static public int Width { get => matrix.Width; }
+        static public int Height { get => matrix.Height; }
         static public int MinWidth { get; private set; }
         static public int MinHeight { get; private set; }
         static public char Space { get; set; }
-        static private char[,] output;
+        static private OutputMatrix matrix;
         static GameIO()
         {
             MinWidth = 20;
             MinHeight = 20;
             Space = ' ';
+            matrix = new OutputMatrix(1, 1);
             Resize(Console.WindowWidth, Console.WindowHeight);
-        }
-        static public void SetChar(int x, int y, char c)
-        {
-            output[x, y] = c;
-        }
-        static public char GetChar(int x, int y)
-        {
-            return output[x, y];
         }
         static public void Resize(int width, int height)
         {
             if (Width < 0 || Height < 0)
                 throw new GameIOException("Negative resize");
-            Width = width;
-            Height = height;
-            output = new char[Width, Height];
+            matrix.Resize(width, height);
         }
         static public void Write()
         {
@@ -55,21 +46,22 @@ namespace GameLife
             {
                 Console.SetCursorPosition(0, y);
                 for (int x = 0; x < Width; x++)
-                    Console.Write(output[x, y]);
+                    Console.Write(matrix.GetChar(x, y));
             }
             Console.SetCursorPosition(0, 0);
         }
         static public void WriteCommand()
         {
             Console.SetCursorPosition(0, Height - 1);
-            for (int x = 0; x < Height; x++)
-                Console.Write(output[x, Height - 1]);
+            for (int x = 0; x < Width; x++)
+                Console.Write(matrix.GetChar(x, Height - 1));
+            Console.SetCursorPosition(0, 0);
         }
         static public string ReadCommand()
         {
             var input = new StringBuilder();
             int indent = 0;
-            SetChar(0, Height - 1, ':');
+            matrix.SetChar(0, Height - 1, ':');
             WriteCommand();
             while (true)
             {
@@ -96,13 +88,12 @@ namespace GameLife
                             if (indent > 0)
                             {
                                 indent--;
-                                SetChar(Width - 1, Height - 1, Space);
-                                for (int x = Width - 1; x > 1; x--)
-                                    output[x, Height - 1] = output[x - 1, Height - 1];
-                                output[1, Height - 1] = input[indent];
+                                matrix.SetChar(Width - 1, Height - 1, Space);
+                                matrix.ShiftLineRight(Height - 1, 1, Width);
+                                matrix.SetChar(1, Height - 1, input[indent]);
                             }
                             else
-                                SetChar(input.Length, Height - 1, Space);
+                                matrix.SetChar(input.Length, Height - 1, Space);
                             input.Remove(input.Length - 1, 1);
                         }
                         break;
@@ -110,19 +101,23 @@ namespace GameLife
                         input.Append(c.KeyChar);
                         if (input.Length >= Width)
                         {
-                            for (int x = 1; x < Width - 1; x++)
-                                output[x, Height - 1] = output[x + 1, Height - 1];
-                            output[Width - 1, Height - 1] = input[input.Length - 1];
+                            matrix.ShiftLineLeft(Height - 1, 1, Width - 1);
+                            matrix.SetChar(Width - 1, Height - 1, input[input.Length - 1]);
                             indent++;
                         }
                         else
-                            SetChar(input.Length, Height - 1, c.KeyChar);
+                            matrix.SetChar(input.Length, Height - 1, c.KeyChar);
                         break;
                 }
                 WriteCommand();
             }
         }
-
+        static public void AddCellPoint(int x, int y, char c)
+        {
+            if (x < 0 || y < 0 || x >= Width || y >= Height)
+                throw new GameIOException("Invalid coordinate");
+            matrix.SetChar(x, y, c);
+        }
         static private void ClearOutput()
         {
             ClearField();
@@ -132,12 +127,12 @@ namespace GameLife
         {
             for (int x = 0; x < Width; x++)
                 for (int y = 0; y < Height - 1; y++)
-                    output[x, y] = Space;
+                    matrix.SetChar(x, y, Space);
         }
         static private void ClearCommand()
         {
             for (int x = 0; x < Width; x++)
-                output[x, Height - 1] = Space;
+                matrix.SetChar(x, Height - 1, Space);
         }
     }
 }

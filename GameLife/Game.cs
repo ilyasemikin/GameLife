@@ -37,18 +37,17 @@ namespace GameLife
         static List<CellPoint> cells = new List<CellPoint>();
 
         static private int _latency = 100;
-        static public int Width { get; set; }
-        static public int Height { get; set; }
+        static public int Width { get => GameIO.Width; }
+        static public int Height { get => GameIO.Height; }
         static public int Latency
         {
             get => _latency;
-            set => _latency = (value > 10) ? value : 500;
+            set => _latency = (value > 10) ? value : 75;
         }
         static public bool StopGame { get; set; } = false;
         static GameEngine()
         {
-            Width = Console.WindowWidth;
-            Height = Console.WindowHeight;
+
         }
         static public bool CellPointCorrect(CellPoint cell) => cell.X >= 0 && cell.X < Width && cell.Y >= 0 && cell.Y < Height;
         static public void AddLivingCells(CellPoint[] cls)
@@ -73,7 +72,7 @@ namespace GameLife
         {
             Console.CursorVisible = false;
             foreach (var cell in cells)
-                GameIO.SetChar(x + cell.X, y + cell.Y, '*');
+                GameIO.AddCellPoint(x + cell.X, y + cell.Y, '*');
         }
         static public void CreateNextGeneration()
         {
