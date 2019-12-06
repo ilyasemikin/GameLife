@@ -27,13 +27,15 @@ namespace GameLife
         {
             MinWidth = 20;
             MinHeight = 20;
-            DefaultMessageBackgroundColor = ConsoleColor.White;
+            DefaultMessageBackgroundColor = ConsoleColor.Gray;
             DefaultMessageForegroundColor = ConsoleColor.Black;
             Space = ' ';
             matrix = new OutputMatrix(1, 1);
-            Message = new GameMessage(null, DefaultBackgroundColor, DefaultForegroundColor);
+            Message = new GameMessage(null, DefaultMessageBackgroundColor, DefaultMessageForegroundColor);
             Resize(Console.WindowWidth, Console.WindowHeight);
         }
+        static private bool IsNeedResize() => Width != Console.WindowWidth || Height != Console.WindowHeight;
+        static private bool WindowHasMinimumRequiredSize() => Width > MinWidth && Height > MinHeight;
         static public void Resize(int width, int height)
         {
             if (Width < 0 || Height < 0)
@@ -43,11 +45,22 @@ namespace GameLife
         }
         static public void Write()
         {
-            WriteField();
-            ClearField();
-            WriteMessage();
+            if (IsNeedResize())
+                Resize(Console.WindowWidth, Console.WindowHeight);
+            if (WindowHasMinimumRequiredSize())
+            {
+                WriteField();
+                ClearField();
+                WriteMessage();
+            }
+            else
+            {
+                Console.SetCursorPosition(0, 0);
+                Console.Write("Too small window");
+                Console.SetCursorPosition(0, 0);
+            }
         }
-        static public void WriteField()
+        static private void WriteField()
         {
             for (int y = 0; y < Height - 2; y++)
             {
@@ -56,20 +69,18 @@ namespace GameLife
             }
             Console.SetCursorPosition(0, 0);
         }
-        static public void WriteCommand()
+        static private void WriteCommand()
         {
             Console.SetCursorPosition(0, Height - 1);
-            for (int x = 0; x < Width; x++)
-                Console.Write(matrix.GetChar(x, Height - 1));
+            Console.Write(matrix.GetLine(Height - 1));
             Console.SetCursorPosition(0, 0);
         }
-        static public void WriteMessage()
+        static private void WriteMessage()
         {
             PrepareMessageToOutput();
             var colors = ChangeColors(Message.bcolor, Message.fcolor);
             Console.SetCursorPosition(0, Height - 2);
-            for (int x = 0; x < Width; x++)
-                Console.Write(matrix.GetChar(x, Height - 2));
+            Console.Write(matrix.GetLine(Height - 2));
             Console.SetCursorPosition(0, 0);
             ChangeColors(colors.Item1, colors.Item2);
         }
@@ -91,7 +102,10 @@ namespace GameLife
                 MessageShowedTicks--;
             }
             else
-                Message = new GameMessage(null, DefaultBackgroundColor, DefaultForegroundColor);
+            {
+                ClearMessage();
+                Message = new GameMessage(null, DefaultMessageBackgroundColor, DefaultMessageForegroundColor);
+            }
         }
         static public string ReadCommand()
         {
@@ -117,6 +131,7 @@ namespace GameLife
                     case ConsoleKey.LeftArrow:
                     case ConsoleKey.RightArrow:
                     case ConsoleKey.Delete:
+                    case ConsoleKey.Tab:
                         continue;
                     case ConsoleKey.Backspace:
                         if (input.Length > 0)
@@ -158,6 +173,7 @@ namespace GameLife
         {
             ClearField();
             ClearCommand();
+            ClearMessage();
         }
         static private void ClearField()
         {
