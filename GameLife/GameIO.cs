@@ -20,29 +20,36 @@ namespace GameLife
         static public int MinWidth { get; private set; }
         static public int MinHeight { get; private set; }
         static public char Space { get; set; }
+        static public ConsoleColor DefaultBackgroundColor { get; set; }
+        static public ConsoleColor DefaultForegroundColor { get; set; }
         static private OutputMatrix matrix;
         static GameIO()
         {
             MinWidth = 20;
             MinHeight = 20;
+            DefaultMessageBackgroundColor = ConsoleColor.White;
+            DefaultMessageForegroundColor = ConsoleColor.Black;
             Space = ' ';
             matrix = new OutputMatrix(1, 1);
+            Message = new GameMessage(null, DefaultBackgroundColor, DefaultForegroundColor);
             Resize(Console.WindowWidth, Console.WindowHeight);
         }
         static public void Resize(int width, int height)
         {
             if (Width < 0 || Height < 0)
                 throw new GameIOException("Negative resize");
+            Console.CursorVisible = false;
             matrix.Resize(width, height);
         }
         static public void Write()
         {
             WriteField();
             ClearField();
+            WriteMessage();
         }
         static public void WriteField()
         {
-            for (int y = 0; y < Height; y++)
+            for (int y = 0; y < Height - 2; y++)
             {
                 Console.SetCursorPosition(0, y);
                 for (int x = 0; x < Width; x++)
@@ -56,6 +63,36 @@ namespace GameLife
             for (int x = 0; x < Width; x++)
                 Console.Write(matrix.GetChar(x, Height - 1));
             Console.SetCursorPosition(0, 0);
+        }
+        static public void WriteMessage()
+        {
+            PrepareMessageToOutput();
+            var colors = ChangeColors(Message.bcolor, Message.fcolor);
+            Console.SetCursorPosition(0, Height - 2);
+            for (int x = 0; x < Width; x++)
+                Console.Write(matrix.GetChar(x, Height - 2));
+            Console.SetCursorPosition(0, 0);
+            ChangeColors(colors.Item1, colors.Item2);
+        }
+        static public ConsoleColor DefaultMessageBackgroundColor { get; set; }
+        static public ConsoleColor DefaultMessageForegroundColor { get; set; }
+        static private GameMessage Message { get; set; }
+        static private int MessageShowedTicks { get; set; }
+        static public void SetMessage(GameMessage message, int ticks = 5)
+        {
+            MessageShowedTicks = ticks;
+            Message = message;
+        }
+        static private void PrepareMessageToOutput()
+        {
+            if (MessageShowedTicks > 0)
+            {
+                for (int x = 0; x < Width; x++)
+                    matrix.SetChar(x, Height - 2, x < Message.text.Length ? Message.text[x] : Space);
+                MessageShowedTicks--;
+            }
+            else
+                Message = new GameMessage(null, DefaultBackgroundColor, DefaultForegroundColor);
         }
         static public string ReadCommand()
         {
@@ -133,6 +170,18 @@ namespace GameLife
         {
             for (int x = 0; x < Width; x++)
                 matrix.SetChar(x, Height - 1, Space);
+        }
+        static private void ClearMessage()
+        {
+            for (int x = 0; x < Width; x++)
+                matrix.SetChar(x, Height - 2, Space);
+        }
+        static private (ConsoleColor, ConsoleColor) ChangeColors(ConsoleColor bcolor, ConsoleColor fcolor)
+        {
+            var ret = (bcolor: Console.BackgroundColor, fcolor: Console.ForegroundColor);
+            Console.BackgroundColor = bcolor;
+            Console.ForegroundColor = fcolor;
+            return ret;
         }
     }
 }

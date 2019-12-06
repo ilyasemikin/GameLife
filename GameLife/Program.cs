@@ -8,10 +8,10 @@ namespace GameLife
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             GameFigures.GetFiguresFromFile("figures");
-            GameEngine.Latency = 150;
+            GameEngine.Latency = 60;
             GameEngine.Run();
         }
     }

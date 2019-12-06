@@ -24,6 +24,7 @@ namespace GameLife
         }
         static public int GetFiguresFromFile(string filename)
         {
+            // Maybe need refactoring
             if (!File.Exists(filename))
                 throw new GameFiguresException(string.Format($"File {filename} not exist"));
             var correctLinePattern = @"\D+={\s*(\(\s*\d+\s*,\s*\d+\s*\)\s*,\s*)*(\s*\(\s*\d+\s*,\s*\d+\s*\)\s*)?\s*}";

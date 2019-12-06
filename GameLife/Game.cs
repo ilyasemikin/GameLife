@@ -38,7 +38,7 @@ namespace GameLife
 
         static private int _latency = 100;
         static public int Width { get => GameIO.Width; }
-        static public int Height { get => GameIO.Height; }
+        static public int Height { get => GameIO.Height - 2; }
         static public int Latency
         {
             get => _latency;
@@ -135,7 +135,7 @@ namespace GameLife
                     }
                     catch (GameCommandsException e)
                     {
-                        
+                        GameIO.SetMessage(new GameMessage(e.Message, ConsoleColor.Red, ConsoleColor.White));
                     }
                 }
             }
