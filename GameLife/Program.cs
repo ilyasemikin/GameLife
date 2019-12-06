@@ -24,6 +24,7 @@ namespace GameLife
         static void Main(string[] args)
         {
             AddTestCells();
+            GameFigures.GetFiguresFromFile("figures");
             GameEngine.Latency = 150;
             GameEngine.Run();
         }
