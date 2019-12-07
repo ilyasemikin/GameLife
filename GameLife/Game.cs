@@ -7,38 +7,13 @@ using static System.Math;
 
 namespace GameLife
 {
-    public class CellPoint
-    {
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int CountNeighbors { get; set; }
-
-        public CellPoint(int x, int y)
-        {
-            X = x;
-            Y = y;
-        }
-        public override bool Equals(object obj)
-        {
-            if ((obj == null) || !GetType().Equals(obj.GetType()))
-            {
-                return false;
-            }
-            CellPoint p = (CellPoint)obj;
-            return (X == p.X) && (Y == p.Y);
-        }
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-    }
     static public class GameEngine
     {
         static List<CellPoint> cells = new List<CellPoint>();
 
         static private int _latency = 100;
-        static public int Width { get => GameIO.Width; }
-        static public int Height { get => GameIO.Height - 2; }
+        static public int Width { get => GameIO.GetFieldSize().Item1; }
+        static public int Height { get => GameIO.GetFieldSize().Item2; }
         static public int Latency
         {
             get => _latency;

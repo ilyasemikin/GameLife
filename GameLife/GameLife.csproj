@@ -43,11 +43,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CellPoint.cs" />
+    <Compile Include="ConsoleFunctions.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameCommands.cs" />
     <Compile Include="GameFigures.cs" />
     <Compile Include="GameIO.cs" />
     <Compile Include="GameMessage.cs" />
+    <Compile Include="GamePanel.cs" />
+    <Compile Include="GamePanelField.cs" />
+    <Compile Include="GamePanelMessage.cs" />
+    <Compile Include="GameReadPanel.cs" />
+    <Compile Include="GameReadPanelCommand.cs" />
     <Compile Include="OutputMatrix.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

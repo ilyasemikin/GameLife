@@ -30,12 +30,13 @@ namespace GameLife
         }
         public void SetChar(int x, int y, char c) => matrix[x, y] = c;
         public char GetChar(int x, int y) => matrix[x, y];
-        public string GetLine(int line)
+        public string GetLine(int line) => GetLine(line, 0, Width);
+        public string GetLine(int line, int startIndex, int endIndex)
         {
             if (line < 0 || line >= Height)
                 throw new OutputMatrixException(string.Format($"Invalid index {line}"));
             var ret = new StringBuilder();
-            for (int x = 0; x < Width; x++)
+            for (int x = startIndex; x < endIndex; x++)
                 ret.Append(matrix[x, line]);
             return ret.ToString();
         }

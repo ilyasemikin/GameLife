@@ -17,7 +17,7 @@ namespace GameLife
 
     static class GameFigures
     {
-        static public readonly Dictionary<string, (int, int)[]> figures;
+        static private readonly Dictionary<string, (int, int)[]> figures;
         static GameFigures()
         {
             figures = new Dictionary<string, (int, int)[]>();
@@ -62,7 +62,7 @@ namespace GameLife
         static public (int, int)[] SearchFigure(string figure)
         {
             if (figures.ContainsKey(figure))
-                return figures[figure];
+                return ((int, int)[])figures[figure].Clone();
             return null;
         }
     }
