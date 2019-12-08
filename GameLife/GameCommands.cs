@@ -30,88 +30,93 @@ namespace GameLife
         }
         static public void TryParseCommand(string input)
         {
-            var words = input.Split();
+            var words = input.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             var command = words[0];
             if (avaliableCommands.ContainsKey(command))
-            {
-                words = words.Skip(1)
-                             .ToArray();
                 avaliableCommands[command](words);
-            }
             else
                 throw new GameCommandsException(string.Format($"Unknown command: {command}"));
         }
-        static private void AddLiveCell(string[] argv)
+        static private bool IsCorrectParams(string[] argv, int expectedArgvLength) { 
+            if (argv.Length == 0)
+                throw new Exception();
+            if (argv.Length - 1 != expectedArgvLength)
+                throw new GameCommandsException(string.Format($"{argv[0]}: excpected {expectedArgvLength} parametrs, but get {argv.Length - 1}"));
+            return true;
+        }
+        static private bool IsCorrectMinParams(string[] argv, int minExpectedArgvlength)
         {
-            if (argv.Length == 2)
+            if (argv.Length == 0)
+                throw new Exception();
+            if (argv.Length - 1 < minExpectedArgvlength)
+                throw new GameCommandsException(string.Format($"{argv[0]}: excpected minimum {minExpectedArgvlength} parametrs, but get {argv.Length - 1}"));
+            return true;
+        }
+        /// <summary>
+        /// Парсинг координат клеток начиная со startIndex до конца
+        /// </summary>
+        static private CellPoint[] ParseCellPoints(string[] argv, int startIndex)
+        {
+            var countArgv = argv.Length - startIndex;
+            if (countArgv % 2 != 0)
+                throw new Exception();
+            var countDots = countArgv / 2;
+            var ret = new CellPoint[countDots];
+            for (int i = 0; i < countDots; i++)
             {
                 int x, y;
-                if (!int.TryParse(argv[0], out x) || !int.TryParse(argv[1], out y))
-                    throw new GameCommandsException("Incorrect arguments command 'add'");
-                if (!GameEngine.CellPointCorrect(new CellPoint(x, y)))
-                    throw new GameCommandsException("Incorrect coordinate");
-                GameEngine.AddLivingCell(new CellPoint(x, y));
+                var index = startIndex + 2 * i;
+                if (!int.TryParse(argv[index], out x) || !int.TryParse(argv[index + 1], out y))
+                    throw new Exception();
+                if (!GameEngine.IsCorrectCoordinate(x, y))
+                    throw new Exception();
+                ret[i] = new CellPoint(x, y);
             }
-            else
-                throw new GameCommandsException("Command 'add' required 2 arguments");
+            return ret;
+        }
+        static private void AddLiveCell(string[] argv)
+        {
+            if (IsCorrectMinParams(argv, 2))
+                GameEngine.AddLivingCells(ParseCellPoints(argv, 1));
         }
         static private void DeleteLiveCell(string[] argv)
         {
-            if (argv.Length == 2)
-            {
-                int x, y;
-                if (!int.TryParse(argv[0], out x) || !int.TryParse(argv[1], out y))
-                    throw new GameCommandsException("Incorrect arguments command 'delete'");
-                if (!GameEngine.CellPointCorrect(new CellPoint(x, y)))
-                    throw new GameCommandsException("Incorrect coordinate");
-                GameEngine.DeleteLivingCell(new CellPoint(x, y));
-            }
-            else
-                throw new GameCommandsException("Command 'delete' required 2 arguments");
+            if (IsCorrectMinParams(argv, 2))
+                GameEngine.DeleteLivingCells(ParseCellPoints(argv, 1));
         }
         static private void StartGame(string[] argv)
         {
-            if (argv.Length == 0)
+            if (IsCorrectParams(argv, 0))
                 GameEngine.StopGame = false;
-            else
-                throw new GameCommandsException("Command 'start' not required arguments");
         }
         static private void StopGame(string[] argv)
         {
-            if (argv.Length == 0)
+            if (IsCorrectParams(argv, 0))
                 GameEngine.StopGame = true;
-            else
-                throw new GameCommandsException("Command 'stop' not required arguments");
         }
         static private void ClearField(string[] argv)
         {
-            if (argv.Length == 0)
+            if (IsCorrectParams(argv, 0))
                 GameEngine.ClearField();
-            else
-                throw new GameCommandsException("Command 'clear' not required arguments");
         }
-
         static private void PlaceFigure(string[] argv)
         {
-            if (argv.Length == 3)
+            if (IsCorrectMinParams(argv, 3))
             {
-                var figureName = argv[0];
-                int x, y;
-                if (!int.TryParse(argv[1], out x) || !int.TryParse(argv[2], out y))
-                    throw new GameCommandsException("Incorrect arguments command 'place'");
-                if (!GameEngine.CellPointCorrect(new CellPoint(x, y)))
-                    throw new GameCommandsException("Incorrect cordinate");
+                var figureName = argv[1];
+                var cells = ParseCellPoints(argv, 2);
                 var figure = GameFigures.SearchFigure(figureName);
                 if (figure == null)
                     throw new GameCommandsException(string.Format($"Figure {figureName} not exist"));
-                // TODO: Refactor
-                for (int i = 0; i < figure.Length; i++)
-                    figure[i] = (figure[i].Item1 + x, figure[i].Item2 + y);
-                foreach (var item in figure)
-                    GameEngine.AddLivingCell(new CellPoint(item.Item1, item.Item2));
+                foreach (var cell in cells)
+                {
+                    for (int i = 0; i < figure.Length; i++)
+                        figure[i] = (figure[i].Item1 + cell.X, figure[i].Item2 + cell.Y);
+                    foreach (var item in figure)
+                        GameEngine.AddLivingCell(new CellPoint(item.Item1, item.Item2));
+                }
+                GameIO.SetMessage(new GameMessage(string.Format($"Figure{(cells.Length == 1 ? "" : "s")} {figureName} added"), ConsoleColor.DarkGreen, ConsoleColor.White), 20);
             }
-            else
-                throw new GameCommandsException("Command 'place' required 3 arguments");
         }
     }
 }

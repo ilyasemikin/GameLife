@@ -10,7 +10,6 @@ namespace GameLife
     static public class GameEngine
     {
         static List<CellPoint> cells = new List<CellPoint>();
-
         static private int _latency = 100;
         static public int Width { get => GameIO.GetFieldSize().Item1; }
         static public int Height { get => GameIO.GetFieldSize().Item2; }
@@ -24,7 +23,8 @@ namespace GameLife
         {
 
         }
-        static public bool CellPointCorrect(CellPoint cell) => cell.X >= 0 && cell.X < Width && cell.Y >= 0 && cell.Y < Height;
+        static public bool IsCorrectCoordinate(int x, int y) => x >= 0 && x < Width && y >= 0 && y < Height;
+        static public bool CellPointCorrect(CellPoint cell) => IsCorrectCoordinate(cell.X, cell.Y);
         static public void AddLivingCells(CellPoint[] cls)
         {
             foreach (var cell in cls)
@@ -36,18 +36,19 @@ namespace GameLife
                 cells.Add(cell);
         }
         static public void AddLivingCell(int x, int y) => cells.Add(new CellPoint(x, y));
-
-        static public void DeleteLivingCell(CellPoint cell) => cells.Remove(cell);
-
-        static public void DeleteLivingCell(int x, int y) => DeleteLivingCell(new CellPoint(x, y));
-
-        static public void ClearField() => cells.Clear();
-
-        static public void DrawField(int x = 0, int y = 0)
+        static public void DeleteLivingCells(CellPoint[] cells)
         {
-            Console.CursorVisible = false;
             foreach (var cell in cells)
-                GameIO.AddCellPoint(x + cell.X, y + cell.Y, '*');
+                DeleteLivingCell(cell);
+        }
+        static public void DeleteLivingCell(CellPoint cell) => cells.Remove(cell);
+        static public void DeleteLivingCell(int x, int y) => DeleteLivingCell(new CellPoint(x, y));
+        static public void ClearField() => cells.Clear();
+        // Add check cell correct
+        static public void DrawField()
+        {
+            foreach (var cell in cells)
+                GameIO.AddCellPoint(cell.X, cell.Y, '*');
         }
         static public void CreateNextGeneration()
         {
@@ -76,7 +77,6 @@ namespace GameLife
             foreach (var cell in cells)
                 cell.CountNeighbors = CalculateCountNeightborsCell(cells, cell);
         }
-        
         static private int CalculateCountNeightborsCell(List<CellPoint> cells, CellPoint cell)
         {
             Func<CellPoint, bool> onCenter = (x => Abs(cell.X - x.X) <= 1 && Abs(cell.Y - x.Y) <= 1);
@@ -85,10 +85,8 @@ namespace GameLife
             Func<CellPoint, bool> onCorner = (x => Abs(cell.X - x.X) == Width - 1 && Abs(cell.Y - x.Y) == Height - 1);
 
             if (cell.X == 0 || cell.X == Width - 1 || cell.Y == 0 || cell.Y == Height - 1)
-            {
                 cell.CountNeighbors = cells.Where(x => onCenter(x) || onLRBorder(x) || onTBBorder(x) || onCorner(x))
                                            .Count();
-            }
             else
                 cell.CountNeighbors = cells.Where(x => onCenter(x))
                                            .Count();
@@ -120,7 +118,7 @@ namespace GameLife
                     {
                         GameCommands.TryParseCommand(input);
                     }
-                    catch (GameCommandsException e)
+                    catch (Exception e)
                     {
                         GameIO.SetMessage(new GameMessage(e.Message, ConsoleColor.Red, ConsoleColor.White));
                     }

@@ -56,6 +56,8 @@ namespace GameLife
             panel.Y = y;
             panel.Width = width;
         }
+        static private void SetPositionPanel(GamePanel panel, int x0, int y0, int x, int y) => ResizePanel(panel, x0, y0, x - x0 + 1, y - y0 + 1);
+        static private void SetPositionReadPanel(GameReadPanel panel, int x0, int y0, int x) => ResizeReadPanel(panel, x0, y0, x - x0 + 1);
         static private void ResizeAllPanels()
         {
             ResizePanel(panelField, 0, 0, Width, Height - 2);
