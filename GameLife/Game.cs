@@ -56,7 +56,7 @@ namespace GameLife
                                             .ToList();
             foreach (var cell in cells)
             {
-                var offsets = new (int, int)[] { (0, -1), (0, 1), (-1, 0), (1, 0) };
+                var offsets = new (int, int)[] { (-1, -1), (0, -1), (1, -1), (-1, 0), (1, 0), (-1, 1), (0, 1), (1, 1) };
                 for (int i = 0; i < offsets.Length; i++)
                 {
                     var anotherCell = new CellPoint(cell.X + offsets[i].Item1, cell.Y + offsets[i].Item2);
