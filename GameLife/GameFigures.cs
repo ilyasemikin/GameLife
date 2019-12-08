@@ -7,14 +7,6 @@ using System.Threading.Tasks;
 
 namespace GameLife
 {
-    class GameFiguresException : Exception
-    {
-        public GameFiguresException(string msg) : base(msg)
-        {
-
-        }
-    }
-
     static class GameFigures
     {
         static private readonly Dictionary<string, (int, int)[]> figures;
@@ -26,7 +18,7 @@ namespace GameLife
         {
             // Maybe need refactoring
             if (!File.Exists(filename))
-                throw new GameFiguresException(string.Format($"File {filename} not exist"));
+                throw new FileNotFoundException("", filename);
             var correctLinePattern = @"\D+={\s*(\(\s*\d+\s*,\s*\d+\s*\)\s*,\s*)*(\s*\(\s*\d+\s*,\s*\d+\s*\)\s*)?\s*}";
             var correctLineRegex = new Regex(correctLinePattern);
             var dotsPattern = @"(\d+\s*,\s*\d+)";
@@ -54,7 +46,7 @@ namespace GameLife
                 else
                 {
                     figures.Clear();
-                    throw new GameFiguresException(string.Format($"Line №{ret} has incorrect format in file {filename}"));
+                    throw new FileStringParseException($"Line №{ret} has incorrect format in file {filename}");
                 }
             }
             return ret;

@@ -45,6 +45,9 @@
   <ItemGroup>
     <Compile Include="CellPoint.cs" />
     <Compile Include="ConsoleFunctions.cs" />
+    <Compile Include="CountCommandParamsException.cs" />
+    <Compile Include="FigureNotFoundException.cs" />
+    <Compile Include="FileStringParseException.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameCommands.cs" />
     <Compile Include="GameFigures.cs" />
@@ -58,9 +61,12 @@
     <Compile Include="OutputMatrix.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnknownCommandException.cs" />
+    <Compile Include="WindowSizeChangedException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="figures" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -6,13 +6,6 @@ using System.Threading.Tasks;
 
 namespace GameLife
 {
-    class OutputMatrixException : Exception
-    {
-        public OutputMatrixException(string message) : base(message)
-        {
-
-        }
-    }
     class OutputMatrix
     {
         private char[,] matrix;
@@ -25,7 +18,7 @@ namespace GameLife
         public void Resize(int m, int n)
         {
             if (m <= 0 || n <= 0)
-                throw new OutputMatrixException("Invalid size");
+                throw new ArgumentOutOfRangeException($"(m = {m}, n = {n})");
             matrix = new char[m, n];
         }
         public void SetChar(int x, int y, char c) => matrix[x, y] = c;
@@ -34,7 +27,7 @@ namespace GameLife
         public string GetLine(int line, int startIndex, int endIndex)
         {
             if (line < 0 || line >= Height)
-                throw new OutputMatrixException(string.Format($"Invalid index {line}"));
+                throw new ArgumentOutOfRangeException($"line = {line}");
             var ret = new StringBuilder();
             for (int x = startIndex; x < endIndex; x++)
                 ret.Append(matrix[x, line]);
@@ -43,14 +36,14 @@ namespace GameLife
         public void ShiftLineLeft(int line, int startIndex, int endIndex)
         {
             if (line < 0 || line >= Height)
-                throw new OutputMatrixException(string.Format($"Invalid index {line}"));
+                throw new ArgumentOutOfRangeException($"line = {line}");
             for (int x = startIndex; x < endIndex; x++)
                 matrix[x, line] = matrix[x + 1, line];
         }
         public void ShiftLineRight(int line, int startIndex, int endIndex)
         {
             if (line < 0 || line >= Height)
-                throw new OutputMatrixException(string.Format($"Invalid index {line}"));
+                throw new ArgumentOutOfRangeException($"line = {line}");
             for (int x = endIndex - 1; x > startIndex; x--)
                 matrix[x, line] = matrix[x - 1, line];
         }

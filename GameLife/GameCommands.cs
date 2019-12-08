@@ -6,16 +6,9 @@ using System.Threading.Tasks;
 
 namespace GameLife
 {
-    class GameCommandsException : Exception
-    {
-        public GameCommandsException(string message) : base(message)
-        {
-
-        }
-    }
     static class GameCommands
     {
-        static private Dictionary<string, Action<string[]>> avaliableCommands;
+        static private readonly Dictionary<string, Action<string[]>> avaliableCommands;
         static GameCommands()
         {
             avaliableCommands = new Dictionary<string, Action<string[]>>
@@ -26,6 +19,8 @@ namespace GameLife
                 { "stop", StopGame },
                 { "clear", ClearField },
                 { "place", PlaceFigure },
+                // Maybe temporary
+                { "window", PrintWindowSize },
             };
         }
         static public void TryParseCommand(string input)
@@ -35,41 +30,44 @@ namespace GameLife
             if (avaliableCommands.ContainsKey(command))
                 avaliableCommands[command](words);
             else
-                throw new GameCommandsException(string.Format($"Unknown command: {command}"));
+                throw new UnknownCommandException($"Unknown command: {command}");
         }
         static private bool IsCorrectParams(string[] argv, int expectedArgvLength) { 
             if (argv.Length == 0)
-                throw new Exception();
+                throw new ArgumentException();
             if (argv.Length - 1 != expectedArgvLength)
-                throw new GameCommandsException(string.Format($"{argv[0]}: excpected {expectedArgvLength} parametrs, but get {argv.Length - 1}"));
+                throw new CountCommandParamsException(argv[0], expectedArgvLength, argv.Length - 1);
             return true;
         }
         static private bool IsCorrectMinParams(string[] argv, int minExpectedArgvlength)
         {
             if (argv.Length == 0)
-                throw new Exception();
+                throw new ArgumentException();
             if (argv.Length - 1 < minExpectedArgvlength)
-                throw new GameCommandsException(string.Format($"{argv[0]}: excpected minimum {minExpectedArgvlength} parametrs, but get {argv.Length - 1}"));
+                throw new CountCommandParamsException(
+                    argv[0],
+                    minExpectedArgvlength,
+                    argv.Length - 1,
+                    CountCommandParamsException.Comprasion.MORE);
             return true;
         }
         /// <summary>
-        /// Парсинг координат клеток начиная со startIndex до конца
+        /// Парсинг координат клеток начиная со startIndex до endIndex
         /// </summary>
-        static private CellPoint[] ParseCellPoints(string[] argv, int startIndex)
+        static private CellPoint[] ParseCellPoints(string[] argv, int startIndex, int endIndex)
         {
-            var countArgv = argv.Length - startIndex;
+            var countArgv = endIndex - startIndex;
             if (countArgv % 2 != 0)
-                throw new Exception();
+                throw new CountCommandParamsException(argv[0] + " dots",  countArgv + 1 / 2, countArgv);
             var countDots = countArgv / 2;
             var ret = new CellPoint[countDots];
             for (int i = 0; i < countDots; i++)
             {
-                int x, y;
                 var index = startIndex + 2 * i;
-                if (!int.TryParse(argv[index], out x) || !int.TryParse(argv[index + 1], out y))
-                    throw new Exception();
+                if (!int.TryParse(argv[index], out int x) || !int.TryParse(argv[index + 1], out int y))
+                    throw new ArgumentException($"(x = {argv[index]}), y = {argv[index + 1]}");
                 if (!GameEngine.IsCorrectCoordinate(x, y))
-                    throw new Exception();
+                    throw new ArgumentOutOfRangeException($"(x = {x}, y = {y})");
                 ret[i] = new CellPoint(x, y);
             }
             return ret;
@@ -77,12 +75,12 @@ namespace GameLife
         static private void AddLiveCell(string[] argv)
         {
             if (IsCorrectMinParams(argv, 2))
-                GameEngine.AddLivingCells(ParseCellPoints(argv, 1));
+                GameEngine.AddLivingCells(ParseCellPoints(argv, 1, argv.Length));
         }
         static private void DeleteLiveCell(string[] argv)
         {
             if (IsCorrectMinParams(argv, 2))
-                GameEngine.DeleteLivingCells(ParseCellPoints(argv, 1));
+                GameEngine.DeleteLivingCells(ParseCellPoints(argv, 1, argv.Length));
         }
         static private void StartGame(string[] argv)
         {
@@ -104,10 +102,10 @@ namespace GameLife
             if (IsCorrectMinParams(argv, 3))
             {
                 var figureName = argv[1];
-                var cells = ParseCellPoints(argv, 2);
+                var cells = ParseCellPoints(argv, 2, argv.Length);
                 var figure = GameFigures.SearchFigure(figureName);
                 if (figure == null)
-                    throw new GameCommandsException(string.Format($"Figure {figureName} not exist"));
+                    throw new FigureNotFoundException(figureName);
                 foreach (var cell in cells)
                 {
                     for (int i = 0; i < figure.Length; i++)
@@ -115,8 +113,13 @@ namespace GameLife
                     foreach (var item in figure)
                         GameEngine.AddLivingCell(new CellPoint(item.Item1, item.Item2));
                 }
-                GameIO.SetMessage(new GameMessage(string.Format($"Figure{(cells.Length == 1 ? "" : "s")} {figureName} added"), ConsoleColor.DarkGreen, ConsoleColor.White), 20);
+                GameIO.SetMessage(new GameMessage($"Figure{(cells.Length == 1 ? "" : "s")} {figureName} added", ConsoleColor.DarkGreen, ConsoleColor.White), 20);
             }
+        }
+        static private void PrintWindowSize(string[] argv)
+        {
+            if (IsCorrectParams(argv, 0))
+                GameIO.SetMessage(new GameMessage($"Window size: {Console.WindowWidth}x{Console.WindowHeight}", ConsoleColor.DarkGreen, ConsoleColor.White));
         }
     }
 }

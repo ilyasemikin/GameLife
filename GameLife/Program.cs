@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using System.IO;
 namespace GameLife
 {
     class Program
     {
         static void Main()
         {
-            GameFigures.GetFiguresFromFile("figures");
+            if (File.Exists("figures"))
+                GameFigures.GetFiguresFromFile("figures");
             GameEngine.Latency = 60;
             GameEngine.Run();
         }

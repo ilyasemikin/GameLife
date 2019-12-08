@@ -6,13 +6,6 @@ using System.Threading.Tasks;
 
 namespace GameLife
 {
-    class GameIOException : Exception
-    {
-        public GameIOException(string message) : base(message)
-        {
-
-        }
-    }
     static class GameIO
     {
         static public int Width { get => matrix.Width; }
@@ -39,7 +32,7 @@ namespace GameLife
         static private void Resize(int width, int height)
         {
             if (Width < 0 || Height < 0)
-                throw new GameIOException("Negative resize");
+                throw new ArgumentOutOfRangeException(string.Format($"(width = {width}, height = {height})"));
             Console.CursorVisible = false;
             matrix.Resize(width, height);
         }
@@ -84,7 +77,7 @@ namespace GameLife
                 Console.SetCursorPosition(0, 0);
             }
         }
-        static public void SetMessage(GameMessage message, int ticks = 15) => panelMessage.SetMessage(message, ticks);
+        static public void SetMessage(GameMessage message, int ticks = 50) => panelMessage.SetMessage(message, ticks);
         static public string ReadCommand() => panelCommand.Read();
         static public void AddCellPoint(int x, int y, char c) => panelField.AddCellPoint(x, y, c);
         static public (int, int) GetFieldSize() => (panelField.Width, panelField.Height);

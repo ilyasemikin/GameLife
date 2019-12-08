@@ -44,11 +44,17 @@ namespace GameLife
         static public void DeleteLivingCell(CellPoint cell) => cells.Remove(cell);
         static public void DeleteLivingCell(int x, int y) => DeleteLivingCell(new CellPoint(x, y));
         static public void ClearField() => cells.Clear();
-        // Add check cell correct
         static public void DrawField()
         {
             foreach (var cell in cells)
+            {
+                if (cell.X >= Width || cell.Y >= Height)
+                {
+                    ClearField();
+                    throw new WindowSizeChangedException("Cell point can't displayed. Clear field");
+                }
                 GameIO.AddCellPoint(cell.X, cell.Y, '*');
+            }
         }
         static public void CreateNextGeneration()
         {
@@ -100,11 +106,22 @@ namespace GameLife
             {
                 while (!Console.KeyAvailable)
                 {
+                    try
+                    {
                         DrawField();
                         GameIO.Write();
                         if (!StopGame)
                             CreateNextGeneration();
                         Thread.Sleep(Latency);
+                    }
+                    catch (WindowSizeChangedException e)
+                    {
+                        GameIO.SetMessage(new GameMessage(e.Message, ConsoleColor.DarkYellow, ConsoleColor.White));
+                    }
+                    catch (SystemException e)
+                    {
+                        GameIO.SetMessage(new GameMessage(e.Message, ConsoleColor.Red, ConsoleColor.White));
+                    }
                 }
                 if (Console.ReadKey(true).KeyChar == ':')
                 {
@@ -118,7 +135,7 @@ namespace GameLife
                     {
                         GameCommands.TryParseCommand(input);
                     }
-                    catch (Exception e)
+                    catch (SystemException e)
                     {
                         GameIO.SetMessage(new GameMessage(e.Message, ConsoleColor.Red, ConsoleColor.White));
                     }
