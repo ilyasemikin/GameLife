@@ -12,7 +12,14 @@ namespace GameLife
         override public int X { get; set; }
         override public int Y { get; set; }
         override public int Width { get; set; }
-        override public int Height { get => 1; }
+        override public int Height
+        {
+            get => 1;
+            set
+            {
+                return;
+            }
+        }
         public GameReadPanelCommand(OutputMatrix output) : base(output)
         {
 

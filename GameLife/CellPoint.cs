@@ -19,15 +19,10 @@ namespace GameLife
         public override bool Equals(object obj)
         {
             if ((obj == null) || !GetType().Equals(obj.GetType()))
-            {
                 return false;
-            }
             CellPoint p = (CellPoint)obj;
             return (X == p.X) && (Y == p.Y);
         }
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+        public override int GetHashCode() => base.GetHashCode();
     }
 }

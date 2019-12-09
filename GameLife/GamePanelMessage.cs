@@ -21,33 +21,32 @@ namespace GameLife
                 return;
             }
         }
-        static public ConsoleColor DefaultBackgroundColor { get; set; }
-        static public ConsoleColor DefaultForegroundColor { get; set; }
-        static private GameMessage Message { get; set; }
-        static private int MessageShowedTicks { get; set; }
+        public GameMessage StandartMessage { get; set; }
+        private GameMessage Message { get; set; }
+        private int MessageShowedTicks { get; set; }
         public GamePanelMessage(OutputMatrix output) : base(output)
         {
-            DefaultBackgroundColor = ConsoleColor.White;
-            DefaultForegroundColor = ConsoleColor.Black;
+            StandartMessage = new GameMessage(null, ConsoleColor.White, ConsoleColor.Black);
         }
         public void SetMessage(GameMessage message, int ticks)
         {
             MessageShowedTicks = ticks;
             Message = message;
         }
+        private void WriteMessageToOutput()
+        {
+            var length = (Message.text != null) ? Message.text.Length : 0;
+            for (int x = X; x < X + Width; x++)
+                output.SetChar(x, Y, x < length ? Message.text[x] : Space);
+        }
         private void PrepareMessageToOutput()
         {
             if (MessageShowedTicks > 0)
-            {
-                for (int x = X; x < X + Width; x++)
-                    output.SetChar(x, Y, x < Message.text.Length ? Message.text[x] : Space);
                 MessageShowedTicks--;
-            }
-            else
-            {
-                Clear();
-                Message = new GameMessage(null, DefaultBackgroundColor, DefaultForegroundColor);
-            }
+            else if (Message != StandartMessage)
+                Message = StandartMessage;
+            Clear();
+            WriteMessageToOutput();
         }
         override public void Write()
         {

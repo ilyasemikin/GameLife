@@ -12,10 +12,10 @@ namespace GameLife
         static public int Height { get => matrix.Height; }
         static public int MinWidth { get; private set; }
         static public int MinHeight { get; private set; }
-        static private OutputMatrix matrix;
-        static private GamePanelField panelField;
-        static private GamePanelMessage panelMessage;
-        static private GameReadPanelCommand panelCommand;
+        static private readonly OutputMatrix matrix;
+        static private readonly GamePanelField panelField;
+        static private readonly GamePanelMessage panelMessage;
+        static private readonly GameReadPanelCommand panelCommand;
         static GameIO()
         {
             MinWidth = 20;
@@ -23,6 +23,8 @@ namespace GameLife
             matrix = new OutputMatrix(1, 1);
             panelField = new GamePanelField(matrix);
             panelMessage = new GamePanelMessage(matrix);
+            var message = new GameMessage("Conway's Game of Life", ConsoleColor.DarkBlue, ConsoleColor.White);
+            panelMessage.StandartMessage = message;
             panelCommand = new GameReadPanelCommand(matrix);
             Resize(Console.WindowWidth, Console.WindowHeight);
             ResizeAllPanels();
@@ -43,19 +45,12 @@ namespace GameLife
             panel.Width = width;
             panel.Height = height;
         }
-        static private void ResizeReadPanel(GameReadPanel panel, int x, int y, int width)
-        {
-            panel.X = x;
-            panel.Y = y;
-            panel.Width = width;
-        }
         static private void SetPositionPanel(GamePanel panel, int x0, int y0, int x, int y) => ResizePanel(panel, x0, y0, x - x0 + 1, y - y0 + 1);
-        static private void SetPositionReadPanel(GameReadPanel panel, int x0, int y0, int x) => ResizeReadPanel(panel, x0, y0, x - x0 + 1);
         static private void ResizeAllPanels()
         {
             ResizePanel(panelField, 0, 0, Width, Height - 2);
-            ResizePanel(panelMessage, 0, Height - 2, Width, 0);
-            ResizeReadPanel(panelCommand, 0, Height - 1, Width);
+            ResizePanel(panelMessage, 0, Height - 2, Width, 1);
+            ResizePanel(panelCommand, 0, Height - 1, Width, 1);
         }
         static public void Write()
         {
