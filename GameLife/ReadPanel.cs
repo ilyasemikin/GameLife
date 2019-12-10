@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace GameLife
 {
-    abstract class GameReadPanel : GamePanel
+    abstract class ReadPanel : Panel
     {
         abstract public string Read();
-        public GameReadPanel(OutputMatrix output) : base(output)
+        public ReadPanel(OutputMatrix output) : base(output)
         {
             this.output = output;
             X = Y = 0;

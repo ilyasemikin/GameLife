@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace GameLife
 {
-    abstract class GamePanel
+    abstract class Panel
     {
         protected OutputMatrix output;
-        abstract public char Space { get; set; }
-        abstract public int X { get; set; }
-        abstract public int Y { get; set; }
+        public char Space { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
         abstract public int Width { get; set; }
         abstract public int Height { get; set; }
         abstract public void Write();
         abstract public void Clear();
-        public GamePanel(OutputMatrix output)
+        public Panel(OutputMatrix output)
         {
             this.output = output;
             X = Y = 0;

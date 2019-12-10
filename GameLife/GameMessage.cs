@@ -11,11 +11,13 @@ namespace GameLife
         public string text;
         public ConsoleColor bcolor;
         public ConsoleColor fcolor;
-        public GameMessage(string text, ConsoleColor bcolor, ConsoleColor fcolor)
+        public int ticks;
+        public GameMessage(string text, ConsoleColor bcolor, ConsoleColor fcolor, int ticks)
         {
             this.text = text;
             this.bcolor = bcolor;
             this.fcolor = fcolor;
+            this.ticks = ticks;
         }
         static public bool operator ==(GameMessage msg1, GameMessage msg2) => Equals(msg1, msg2);
         static public bool operator !=(GameMessage msg1, GameMessage msg2) => !(msg1 == msg2);

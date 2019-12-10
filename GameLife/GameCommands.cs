@@ -113,13 +113,13 @@ namespace GameLife
                     foreach (var item in figure)
                         GameEngine.AddLivingCell(new CellPoint(item.Item1, item.Item2));
                 }
-                GameIO.SetMessage(new GameMessage($"Figure{(cells.Length == 1 ? "" : "s")} {figureName} added", ConsoleColor.DarkGreen, ConsoleColor.White), 20);
+                GameIO.SetMessage(new GameMessage($"Figure{(cells.Length == 1 ? "" : "s")} {figureName} added", ConsoleColor.DarkGreen, ConsoleColor.White, 20));
             }
         }
         static private void PrintWindowSize(string[] argv)
         {
             if (IsCorrectParams(argv, 0))
-                GameIO.SetMessage(new GameMessage($"Window size: {Console.WindowWidth}x{Console.WindowHeight}", ConsoleColor.DarkGreen, ConsoleColor.White));
+                GameIO.SetMessage(new GameMessage($"Window size: {Console.WindowWidth}x{Console.WindowHeight}", ConsoleColor.DarkGreen, ConsoleColor.White, 20));
         }
     }
 }

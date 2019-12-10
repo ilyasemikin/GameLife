@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace GameLife
 {
-    class GameReadPanelCommand : GameReadPanel
+    class GameReadPanelCommand : ReadPanel
     {
-        override public char Space { get; set; }
-        override public int X { get; set; }
-        override public int Y { get; set; }
         override public int Width { get; set; }
         override public int Height
         {

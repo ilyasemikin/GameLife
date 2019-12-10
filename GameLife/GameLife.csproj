@@ -53,10 +53,12 @@
     <Compile Include="GameFigures.cs" />
     <Compile Include="GameIO.cs" />
     <Compile Include="GameMessage.cs" />
-    <Compile Include="GamePanel.cs" />
+    <Compile Include="MainPanel.cs" />
+    <Compile Include="Panel.cs" />
     <Compile Include="GamePanelField.cs" />
     <Compile Include="GamePanelMessage.cs" />
-    <Compile Include="GameReadPanel.cs" />
+    <Compile Include="MessagePanel.cs" />
+    <Compile Include="ReadPanel.cs" />
     <Compile Include="GameReadPanelCommand.cs" />
     <Compile Include="OutputMatrix.cs" />
     <Compile Include="Program.cs" />

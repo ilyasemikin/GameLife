@@ -6,32 +6,32 @@ using System.Threading.Tasks;
 
 namespace GameLife
 {
-    class GamePanelMessage : GamePanel
+    class GamePanelMessage : MessagePanel
     {
-        private const int _height = 1;
-        override public char Space { get; set; }
-        override public int X { get; set; }
-        override public int Y { get; set; }
+        private GameMessage _message;
+        private int MessageShowedTicks { get; set; }
         override public int Width { get; set; }
         override public int Height
         {
-            get => _height;
+            get => 1;
             set
             {
                 return;
             }
         }
-        public GameMessage StandartMessage { get; set; }
-        private GameMessage Message { get; set; }
-        private int MessageShowedTicks { get; set; }
+        override public GameMessage StandartMessage { get; set; }
+        override public GameMessage Message
+        {
+            get => _message;
+            set
+            {
+                _message = value;
+                MessageShowedTicks = _message.ticks;
+            }
+        }
         public GamePanelMessage(OutputMatrix output) : base(output)
         {
-            StandartMessage = new GameMessage(null, ConsoleColor.White, ConsoleColor.Black);
-        }
-        public void SetMessage(GameMessage message, int ticks)
-        {
-            MessageShowedTicks = ticks;
-            Message = message;
+            StandartMessage = new GameMessage(null, ConsoleColor.White, ConsoleColor.Black, 0);
         }
         private void WriteMessageToOutput()
         {

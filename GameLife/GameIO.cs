@@ -23,7 +23,7 @@ namespace GameLife
             matrix = new OutputMatrix(1, 1);
             panelField = new GamePanelField(matrix);
             panelMessage = new GamePanelMessage(matrix);
-            var message = new GameMessage("Conway's Game of Life", ConsoleColor.DarkBlue, ConsoleColor.White);
+            var message = new GameMessage("Conway's Game of Life", ConsoleColor.DarkBlue, ConsoleColor.White, 0);
             panelMessage.StandartMessage = message;
             panelCommand = new GameReadPanelCommand(matrix);
             Resize(Console.WindowWidth, Console.WindowHeight);
@@ -38,14 +38,14 @@ namespace GameLife
             Console.CursorVisible = false;
             matrix.Resize(width, height);
         }
-        static private void ResizePanel(GamePanel panel, int x, int y, int width, int height)
+        static private void ResizePanel(Panel panel, int x, int y, int width, int height)
         {
             panel.X = x;
             panel.Y = y;
             panel.Width = width;
             panel.Height = height;
         }
-        static private void SetPositionPanel(GamePanel panel, int x0, int y0, int x, int y) => ResizePanel(panel, x0, y0, x - x0 + 1, y - y0 + 1);
+        static private void SetPositionPanel(Panel panel, int x0, int y0, int x, int y) => ResizePanel(panel, x0, y0, x - x0 + 1, y - y0 + 1);
         static private void ResizeAllPanels()
         {
             ResizePanel(panelField, 0, 0, Width, Height - 2);
@@ -72,7 +72,7 @@ namespace GameLife
                 Console.SetCursorPosition(0, 0);
             }
         }
-        static public void SetMessage(GameMessage message, int ticks = 50) => panelMessage.SetMessage(message, ticks);
+        static public void SetMessage(GameMessage message) => panelMessage.Message = message;
         static public string ReadCommand() => panelCommand.Read();
         static public void AddCellPoint(int x, int y, char c) => panelField.AddCellPoint(x, y, c);
         static public (int, int) GetFieldSize() => (panelField.Width, panelField.Height);

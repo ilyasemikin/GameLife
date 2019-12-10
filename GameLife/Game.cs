@@ -116,11 +116,11 @@ namespace GameLife
                     }
                     catch (WindowSizeChangedException e)
                     {
-                        GameIO.SetMessage(new GameMessage(e.Message, ConsoleColor.DarkYellow, ConsoleColor.White));
+                        GameIO.SetMessage(new GameMessage(e.Message, ConsoleColor.DarkYellow, ConsoleColor.White, 20));
                     }
                     catch (SystemException e)
                     {
-                        GameIO.SetMessage(new GameMessage(e.Message, ConsoleColor.Red, ConsoleColor.White));
+                        GameIO.SetMessage(new GameMessage(e.Message, ConsoleColor.Red, ConsoleColor.White, 20));
                     }
                 }
                 if (Console.ReadKey(true).KeyChar == ':')
@@ -137,7 +137,7 @@ namespace GameLife
                     }
                     catch (SystemException e)
                     {
-                        GameIO.SetMessage(new GameMessage(e.Message, ConsoleColor.Red, ConsoleColor.White));
+                        GameIO.SetMessage(new GameMessage(e.Message, ConsoleColor.Red, ConsoleColor.White, 20));
                     }
                 }
             }

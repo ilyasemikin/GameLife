@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace GameLife
 {
-    class GamePanelField : GamePanel
+    class GamePanelField : MainPanel
     {
-        override public char Space { get; set; }
-        override public int X { get; set; }
-        override public int Y { get; set; }
         override public int Width { get; set; }
         override public int Height { get; set; }
         public GamePanelField(OutputMatrix output) : base(output)
