@@ -14,8 +14,7 @@ namespace GameLife
         {
 
         }
-        // TODO: Add check
-        public void AddCellPoint(int x, int y, char c)
+        override public void SetChar(int x, int y, char c)
         {
             output.SetChar(X + x, Y + y, c);
         }

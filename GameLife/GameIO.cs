@@ -74,7 +74,7 @@ namespace GameLife
         }
         static public void SetMessage(GameMessage message) => panelMessage.Message = message;
         static public string ReadCommand() => panelCommand.Read();
-        static public void AddCellPoint(int x, int y, char c) => panelField.AddCellPoint(x, y, c);
+        static public void AddCellPoint(int x, int y, char c) => panelField.SetChar(x, y, c);
         static public (int, int) GetFieldSize() => (panelField.Width, panelField.Height);
     }
 }

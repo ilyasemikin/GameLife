@@ -11,6 +11,7 @@ namespace GameLife
         public MainPanel(OutputMatrix output) : base(output)
         {
 
-        } 
+        }
+        abstract public void SetChar(int x, int y, char c);
     }
 }

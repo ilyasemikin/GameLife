@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CellPoint.cs" />
+    <Compile Include="CommandEventDescription.cs" />
     <Compile Include="ConsoleFunctions.cs" />
     <Compile Include="CountCommandParamsException.cs" />
     <Compile Include="FigureNotFoundException.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="GameFigures.cs" />
     <Compile Include="GameIO.cs" />
     <Compile Include="GameMessage.cs" />
+    <Compile Include="ICommandEvent.cs" />
     <Compile Include="MainPanel.cs" />
     <Compile Include="Panel.cs" />
     <Compile Include="GamePanelField.cs" />
