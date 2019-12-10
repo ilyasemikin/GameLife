@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace GameLife
 {
-    class GamePanelMessage : MessagePanel
+    sealed class GamePanelMessage : MessagePanel
     {
         private GameMessage _message;
         private int MessageShowedTicks { get; set; }
-        override public int Width { get; set; }
-        override public int Height
+        public override int Width { get; set; }
+        public override int Height
         {
             get => 1;
             set
@@ -19,8 +19,8 @@ namespace GameLife
                 return;
             }
         }
-        override public GameMessage StandartMessage { get; set; }
-        override public GameMessage Message
+        public override GameMessage StandartMessage { get; set; }
+        public override GameMessage Message
         {
             get => _message;
             set
@@ -48,7 +48,7 @@ namespace GameLife
             Clear();
             WriteMessageToOutput();
         }
-        override public void Write()
+        public override void Write()
         {
             PrepareMessageToOutput();
             var colors = ConsoleFunctions.ChangeColors(Message.bcolor, Message.fcolor);

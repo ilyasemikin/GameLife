@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace GameLife
 {
-    class GameReadPanelCommand : ReadPanel
+    sealed class GameReadPanelCommand : ReadPanel
     {
-        override public int Width { get; set; }
-        override public int Height
+        public override int Width { get; set; }
+        public override int Height
         {
             get => 1;
             set
@@ -21,19 +21,21 @@ namespace GameLife
         {
 
         }
-        override public void Write()
+        public override void Write()
         {
             Console.SetCursorPosition(X, Y);
             Console.Write(output.GetLine(Y, X, X + Width));
             Console.SetCursorPosition(0, 0);
         }
-        override public void Clear()
+        public override void Clear()
         {
             for (int x = X; x < X + Width; x++)
                 output.SetChar(x, Y, Space);
         }
-        override public string Read()
+        public override string Read()
         {
+            if (Console.ReadKey(true).KeyChar != ':')
+                return null;
             var input = new StringBuilder();
             int indent = 0;
             output.SetChar(X, Y, ':');

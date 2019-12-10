@@ -19,15 +19,15 @@ namespace GameLife
             this.fcolor = fcolor;
             this.ticks = ticks;
         }
-        static public bool operator ==(GameMessage msg1, GameMessage msg2) => Equals(msg1, msg2);
-        static public bool operator !=(GameMessage msg1, GameMessage msg2) => !(msg1 == msg2);
-        override public bool Equals(object obj)
+        public static bool operator ==(GameMessage msg1, GameMessage msg2) => Equals(msg1, msg2);
+        public static bool operator !=(GameMessage msg1, GameMessage msg2) => !(msg1 == msg2);
+        public override bool Equals(object obj)
         {
             if ((obj == null) || !GetType().Equals(obj.GetType()))
                 return false;
             GameMessage p = (GameMessage)obj;
             return (text == p.text) && (bcolor == p.bcolor) && (fcolor == p.fcolor);
         }
-        override public int GetHashCode() => base.GetHashCode();
+        public override int GetHashCode() => base.GetHashCode();
     }
 }

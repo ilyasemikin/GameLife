@@ -9,8 +9,8 @@ namespace GameLife
     struct CommandEventDescription
     {
         public string description;
-        public Func<string[], object> func;
-        public CommandEventDescription(string desc, Func<string[], object> func)
+        public Action<string[]> func;
+        public CommandEventDescription(string desc, Action<string[]> func)
         {
             description = desc;
             this.func = func;

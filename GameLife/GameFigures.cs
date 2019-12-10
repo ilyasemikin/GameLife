@@ -9,12 +9,12 @@ namespace GameLife
 {
     static class GameFigures
     {
-        static private readonly Dictionary<string, (int, int)[]> figures;
+        private static readonly Dictionary<string, (int, int)[]> figures;
         static GameFigures()
         {
             figures = new Dictionary<string, (int, int)[]>();
         }
-        static public int GetFiguresFromFile(string filename)
+        public static int GetFiguresFromFile(string filename)
         {
             // Maybe need refactoring
             if (!File.Exists(filename))
@@ -51,7 +51,7 @@ namespace GameLife
             }
             return ret;
         }
-        static public (int, int)[] SearchFigure(string figure)
+        public static (int, int)[] SearchFigure(string figure)
         {
             if (figures.ContainsKey(figure))
                 return ((int, int)[])figures[figure].Clone();

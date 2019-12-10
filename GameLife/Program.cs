@@ -8,7 +8,6 @@ namespace GameLife
         {
             if (File.Exists("figures"))
                 GameFigures.GetFiguresFromFile("figures");
-            GameEngine.Latency = 60;
             GameEngine.Run();
         }
     }

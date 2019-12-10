@@ -8,7 +8,7 @@ namespace GameLife
 {
     static class ConsoleFunctions
     {
-        static public (ConsoleColor, ConsoleColor) ChangeColors(ConsoleColor bcolor, ConsoleColor fcolor)
+        public static (ConsoleColor, ConsoleColor) ChangeColors(ConsoleColor bcolor, ConsoleColor fcolor)
         {
             var ret = (bcolor: Console.BackgroundColor, fcolor: Console.ForegroundColor);
             Console.BackgroundColor = bcolor;

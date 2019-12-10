@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace GameLife
 {
-    class GamePanelField : MainPanel
+    sealed class GamePanelField : MainPanel
     {
-        override public int Width { get; set; }
-        override public int Height { get; set; }
+        public override int Width { get; set; }
+        public override int Height { get; set; }
         public GamePanelField(OutputMatrix output) : base(output)
         {
 
         }
-        override public void SetChar(int x, int y, char c)
+        public override void SetChar(int x, int y, char c)
         {
             output.SetChar(X + x, Y + y, c);
         }
-        override public void Write()
+        public override void Write()
         {
             for (int y = Y; y < Y + Height; y++)
             {
@@ -27,7 +27,7 @@ namespace GameLife
             }
             Console.SetCursorPosition(0, 0);
         }
-        override public void Clear()
+        public override void Clear()
         {
             for (int x = X; x < X + Width; x++)
                 for (int y = Y; y < Height; y++)

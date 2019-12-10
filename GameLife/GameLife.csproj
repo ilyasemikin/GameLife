@@ -44,16 +44,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CellPoint.cs" />
+    <Compile Include="CellsFieldCommandHandler.cs" />
     <Compile Include="CommandEventDescription.cs" />
+    <Compile Include="CommandHandler.cs" />
+    <Compile Include="CommandsFunctions.cs" />
     <Compile Include="ConsoleFunctions.cs" />
     <Compile Include="CountCommandParamsException.cs" />
     <Compile Include="FigureNotFoundException.cs" />
     <Compile Include="FileStringParseException.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="GameCommands.cs" />
+    <Compile Include="GameEngine.cs" />
     <Compile Include="GameFigures.cs" />
-    <Compile Include="GameIO.cs" />
+    <Compile Include="GameLogic.cs" />
     <Compile Include="GameMessage.cs" />
+    <Compile Include="GameScene.cs" />
     <Compile Include="ICommandEvent.cs" />
     <Compile Include="MainPanel.cs" />
     <Compile Include="Panel.cs" />
@@ -67,6 +70,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnknownCommandException.cs" />
     <Compile Include="WindowSizeChangedException.cs" />
+    <Compile Include="WorkLogic.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

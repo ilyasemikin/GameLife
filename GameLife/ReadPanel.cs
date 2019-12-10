@@ -8,7 +8,7 @@ namespace GameLife
 {
     abstract class ReadPanel : Panel
     {
-        abstract public string Read();
+        public abstract string Read();
         public ReadPanel(OutputMatrix output) : base(output)
         {
             this.output = output;

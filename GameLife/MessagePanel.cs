@@ -8,8 +8,8 @@ namespace GameLife
 {
     abstract class MessagePanel : Panel
     {
-        abstract public GameMessage Message { get; set; }
-        abstract public GameMessage StandartMessage { get; set; }
+        public abstract GameMessage Message { get; set; }
+        public abstract GameMessage StandartMessage { get; set; }
         public MessagePanel(OutputMatrix output) : base(output)
         {
 
