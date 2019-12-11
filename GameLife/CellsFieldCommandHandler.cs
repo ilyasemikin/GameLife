@@ -8,7 +8,7 @@ namespace GameLife
 {
     sealed class CellsFieldCommandHandler : CommandHandler
     {
-        public CellsFieldCommandHandler(Dictionary<string, CommandEventDescription> commands, Panel[] panels, WorkLogic logic) : base(commands, panels, logic)
+        public CellsFieldCommandHandler(Dictionary<string, CommandEventDescription> commands) : base(commands)
         {
 
         }

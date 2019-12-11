@@ -16,30 +16,35 @@ namespace GameLife
         private WorkLogic logic;
         private CommandHandler commandHandler;
         private bool Exit { get; set; }
+        public int MinWidth { get; set; }
+        public int MinHeight { get; set; }
         public int Width { get => output.Width; }
         public int Height { get => output.Height; }
+        public int MinLatency { get; private set; }
         public int Latency
         {
             get => _latency;
             set
             {
-                _latency = (value > 10) ? value : 80;
+                _latency = (value > MinLatency) ? value : MinLatency;
             }
         }
         public GameScene(MainPanel main, MessagePanel message, ReadPanel read, WorkLogic logic, OutputMatrix output)
         {
             Exit = false;
-            Latency = 80;
+            Latency = MinLatency = 50;
+            MinWidth = MinHeight = 20;
             mainPanel = main;
             messagePanel = message;
             readPanel = read;
             this.logic = logic;
             this.output = output;
             var availableCommands = GetAllCommandEvents();
-            commandHandler = new CellsFieldCommandHandler(availableCommands, new Panel[] { mainPanel, messagePanel, readPanel }, logic);
+            commandHandler = new CellsFieldCommandHandler(availableCommands);
             Resize(Console.WindowWidth, Console.WindowHeight);
             ResizeAllPanels();
         }
+        private bool HasMinimalSize() => Width > MinWidth && Height > MinHeight;
         private bool IsNeedResize() => Width != Console.WindowWidth || Height != Console.WindowHeight;
         private void Resize(int width, int height)
         {
@@ -54,6 +59,18 @@ namespace GameLife
             panel.Y = y;
             panel.Width = width;
             panel.Height = height;
+        }
+        private void Write()
+        {
+            mainPanel.Write();
+            messagePanel.Write();
+            readPanel.Write();
+        }
+        private void Clear()
+        {
+            mainPanel.Clear();
+            messagePanel.Clear();
+            readPanel.Clear();
         }
         private void ResizeAllPanels()
         {
@@ -100,13 +117,20 @@ namespace GameLife
                         Resize(Console.WindowWidth, Console.WindowHeight);
                         ResizeAllPanels();
                     }
-                    mainPanel.Clear();
-                    messagePanel.Clear();
-                    readPanel.Clear();
-                    logic.Draw();
-                    mainPanel.Write();
-                    messagePanel.Write();
-                    logic.Action();
+                    Clear();
+                    if (HasMinimalSize())
+                    {
+                        logic.Draw();
+                        Write();
+                        logic.Action();
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(0, 0);
+                        Console.Write("Too small window");
+                        Console.SetCursorPosition(0, 0);
+                    }
+
                     Thread.Sleep(Latency);
                 }
                 var input = readPanel.Read();
