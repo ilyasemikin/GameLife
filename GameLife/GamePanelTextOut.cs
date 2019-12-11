@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace GameLife
 {
-    sealed class GamePanelField : MainPanel
+    class GamePanelTextOut : MainPanel
     {
         public override int Width { get; set; }
         public override int Height { get; set; }
-        public GamePanelField(OutputMatrix output) : base(output)
+        public GamePanelTextOut(OutputMatrix output) : base(output)
         {
 
         }

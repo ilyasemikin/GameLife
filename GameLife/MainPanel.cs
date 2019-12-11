@@ -12,6 +12,6 @@ namespace GameLife
         {
 
         }
-        public abstract void SetChar(int x, int y, char c);
+        public virtual void SetChar(int x, int y, char c) => output.SetChar(x, y, c);
     }
 }

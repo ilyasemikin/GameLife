@@ -20,27 +20,25 @@ namespace GameLife
         public int MinHeight { get; set; }
         public int Width { get => output.Width; }
         public int Height { get => output.Height; }
-        public int MinLatency { get; private set; }
         public int Latency
         {
             get => _latency;
             set
             {
-                _latency = (value > MinLatency) ? value : MinLatency;
+                _latency = (value > 0) ? value : 0;
             }
         }
         public GameScene(MainPanel main, MessagePanel message, ReadPanel read, WorkLogic logic, OutputMatrix output)
         {
             Exit = false;
-            Latency = MinLatency = 50;
             MinWidth = MinHeight = 20;
             mainPanel = main;
             messagePanel = message;
             readPanel = read;
             this.logic = logic;
             this.output = output;
-            var availableCommands = GetAllCommandEvents();
-            commandHandler = new CellsFieldCommandHandler(availableCommands);
+            var availableCommands = GetCommandEvents();
+            commandHandler = new CommandHandler(availableCommands);
             Resize(Console.WindowWidth, Console.WindowHeight);
             ResizeAllPanels();
         }
@@ -78,13 +76,6 @@ namespace GameLife
             ResizePanel(messagePanel, 0, Console.WindowHeight - 2, Console.WindowWidth, 1);
             ResizePanel(readPanel, 0, Console.WindowHeight - 1, Console.WindowWidth, 1);
         }
-        public Dictionary<string, CommandEventDescription> GetAllCommandEvents()
-        {
-            var ret = new Dictionary<string, CommandEventDescription>();
-            AddRangeDictionary(ret, logic.GetCommandEvents());
-            AddRangeDictionary(ret, GetCommandEvents());
-            return ret;
-        }
         public void AddRangeDictionary(Dictionary<string, CommandEventDescription> ret, Dictionary<string, CommandEventDescription> added)
         {
             foreach (var item in added)
@@ -104,6 +95,7 @@ namespace GameLife
                 { "quit", new CommandEventDescription("", CommandEvent_Exit) },
                 { "q", new CommandEventDescription("", CommandEvent_Exit) },
             };
+            AddRangeDictionary(ret, logic.GetCommandEvents());
             return ret;
         }
         public void Run()

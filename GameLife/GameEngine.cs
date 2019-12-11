@@ -9,11 +9,19 @@ namespace GameLife
     static class GameEngine
     {
         private static OutputMatrix output;
+        private static GameScene currentGameScene;
         private static GameScene mainScene;
+        private static GameScene textScene;
         static GameEngine()
         {
             output = new OutputMatrix(1, 1);
+            InitScenes();
+            currentGameScene = mainScene;
+        }
+        private static void InitScenes()
+        {
             InitMainScene();
+            InitInfoScene();
         }
         private static void InitMainScene()
         {
@@ -23,10 +31,17 @@ namespace GameLife
             var read = new GameReadPanelCommand(output);
             var logic = new GameLogic(main);
             mainScene = new GameScene(main, msg, read, logic, output);
+            mainScene.Latency = 20;
         }
-        public static void Run()
+        private static void InitInfoScene()
         {
-            mainScene.Run();
+            var main = new GamePanelTextOut(output);
+            var msg = new GamePanelMessage(output);
+            var read = new GameReadPanelTextOut(output);
+            var logic = new TextOutLogic(main);
+            textScene = new GameScene(main, msg, read, logic, output);
+            textScene.Latency = 0;
         }
+        public static void Run() => currentGameScene.Run();
     }
 }

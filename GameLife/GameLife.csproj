@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CellPoint.cs" />
-    <Compile Include="CellsFieldCommandHandler.cs" />
     <Compile Include="CommandEventDescription.cs" />
     <Compile Include="CommandHandler.cs" />
     <Compile Include="CommandsFunctions.cs" />
@@ -56,6 +55,8 @@
     <Compile Include="GameFigures.cs" />
     <Compile Include="GameLogic.cs" />
     <Compile Include="GameMessage.cs" />
+    <Compile Include="GamePanelTextOut.cs" />
+    <Compile Include="GameReadPanelTextOut.cs" />
     <Compile Include="GameScene.cs" />
     <Compile Include="ICommandEvent.cs" />
     <Compile Include="MainPanel.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="OutputMatrix.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextOutLogic.cs" />
     <Compile Include="UnknownCommandException.cs" />
     <Compile Include="WindowSizeChangedException.cs" />
     <Compile Include="WorkLogic.cs" />

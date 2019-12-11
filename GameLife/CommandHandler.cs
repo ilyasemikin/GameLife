@@ -6,13 +6,21 @@ using System.Threading.Tasks;
 
 namespace GameLife
 {
-    abstract class CommandHandler
+    sealed class CommandHandler
     {
-        protected Dictionary<string, CommandEventDescription> availableCommands;
+        private Dictionary<string, CommandEventDescription> availableCommands;
         public CommandHandler(Dictionary<string, CommandEventDescription> commands)
         {
             availableCommands = commands;
         }
-        public abstract void TryParseCommand(string input);
+        public void TryParseCommand(string input)
+        {
+            var words = input.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var command = words[0];
+            if (availableCommands.ContainsKey(command))
+                availableCommands[command].func(words);
+            else
+                throw new UnknownCommandException($"Unknown command: {command}");
+        }
     }
 }
