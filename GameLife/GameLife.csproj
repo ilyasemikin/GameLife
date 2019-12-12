@@ -56,6 +56,7 @@
     <Compile Include="GameLogic.cs" />
     <Compile Include="GameMessage.cs" />
     <Compile Include="GamePanelTextOut.cs" />
+    <Compile Include="GamePanelPermanentMessage.cs" />
     <Compile Include="GameReadPanelTextOut.cs" />
     <Compile Include="GameScene.cs" />
     <Compile Include="ICommandEvent.cs" />

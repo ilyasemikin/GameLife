@@ -82,6 +82,7 @@ namespace GameLife
                     mainPanel.SetChar(x, y, (x < line.Length) ? line[x] : mainPanel.Space);
                 y++;
             }
+            msgPanel.Message = new GameMessage($"Line ({CurrentLine + 1}-{CurrentLine + Height})/{CountLines}", ConsoleColor.DarkYellow, ConsoleColor.White, 0);
         }
         public override void Action()
         {

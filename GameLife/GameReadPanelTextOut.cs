@@ -26,9 +26,7 @@ namespace GameLife
             var text = "Press q to exit";
             for (int x = X; x < X + Width; x++)
                 output.SetChar(x, Y, (x < text.Length) ? text[x] : Space);
-            Console.SetCursorPosition(X, Y);
-            Console.Write(output.GetLine(Y, 0, text.Length));
-            Console.SetCursorPosition(0, 0);
+            base.Write();
         }
         public override string Read()
         {

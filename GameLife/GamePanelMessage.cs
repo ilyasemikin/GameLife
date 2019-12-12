@@ -19,7 +19,7 @@ namespace GameLife
                 return;
             }
         }
-        public override GameMessage StandartMessage { get; set; }
+        public GameMessage StandartMessage { get; set; }
         public override GameMessage Message
         {
             get => _message;
@@ -51,11 +51,7 @@ namespace GameLife
         public override void Write()
         {
             PrepareMessageToOutput();
-            var colors = ConsoleFunctions.ChangeColors(Message.bcolor, Message.fcolor);
-            Console.SetCursorPosition(X, Y);
-            Console.Write(output.GetLine(Y, X, X + Width));
-            Console.SetCursorPosition(0, 0);
-            ConsoleFunctions.ChangeColors(colors.Item1, colors.Item2);
+            base.Write();
         }
         public override void Clear()
         {

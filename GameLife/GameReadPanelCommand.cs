@@ -21,17 +21,6 @@ namespace GameLife
         {
 
         }
-        public override void Write()
-        {
-            Console.SetCursorPosition(X, Y);
-            Console.Write(output.GetLine(Y, X, X + Width));
-            Console.SetCursorPosition(0, 0);
-        }
-        public override void Clear()
-        {
-            for (int x = X; x < X + Width; x++)
-                output.SetChar(x, Y, Space);
-        }
         public override string Read()
         {
             if (Console.ReadKey(true).KeyChar != ':')

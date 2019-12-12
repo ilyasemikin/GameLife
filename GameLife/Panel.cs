@@ -26,7 +26,7 @@ namespace GameLife
         public virtual void Clear()
         {
             for (int x = X; x < X + Width; x++)
-                for (int y = Y; y < Height; y++)
+                for (int y = Y; y < Y + Height; y++)
                     output.SetChar(x, y, Space);
         }
         public Panel(OutputMatrix output)

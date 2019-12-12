@@ -17,10 +17,11 @@ namespace GameLife
         }
         public override void Write()
         {
-            // Вычитаю единицу для борьбы с "лагом", резким смещением экрана вниз
-            var len = X + Width - (output.GetChar(Width - 1, Y) != Space ? 0 : 1);
             Console.SetCursorPosition(X, Y);
-            Console.Write(output.GetLine(Y, X, X + Width));
+            Console.Write(output.GetChar(X + Width - 1, Y));
+            Console.MoveBufferArea(X, Y, 1, 1, X + Width - 1, Y);
+            Console.SetCursorPosition(X, Y);
+            Console.Write(output.GetLine(Y, X, X + Width - 1));
             Console.SetCursorPosition(0, 0);
         }
     }

@@ -31,6 +31,8 @@ namespace GameLife
                 { "exit", new CommandEventDescription("", CommandEvent_Exit) },
                 { "quit", new CommandEventDescription("", CommandEvent_Exit) },
                 { "q", new CommandEventDescription("", CommandEvent_Exit) },
+
+                { "test", new CommandEventDescription("", CommandEvent_Test) },
             };
         }
         private static void InitScenes()
@@ -54,7 +56,7 @@ namespace GameLife
         private static void InitInfoScene()
         {
             var main = new GamePanelTextOut(output);
-            var msg = new GamePanelMessage(output);
+            var msg = new GamePanelPermanentMessage(output);
             var read = new GameReadPanelTextOut(output);
             var logic = new TextOutLogic(main, msg);
             textScene = new GameScene(main, msg, read, logic, output)
@@ -76,6 +78,20 @@ namespace GameLife
         private static void CommandEvent_About(string[] argv)
         {
 
+        }
+        private static void CommandEvent_Test(string[] argv)
+        {
+            currentGameScene = textScene;
+            var length = 1000;
+            var text = new string[length];
+            string line;
+            for (int i = 0; i < length; i++) {
+                line = "";
+                for (int j = 0; j < i; j++)
+                    line += '*';
+                text[i] = line;
+            }
+            ((TextOutLogic)textScene.Logic).Text = text;
         }
         private static void CommandEvent_Exit(string[] argv)
         {
