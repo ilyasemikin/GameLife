@@ -8,10 +8,12 @@ namespace GameLife
 {
     abstract class WorkLogic : ICommandEvent
     {
-        protected MainPanel panel;
-        public WorkLogic(MainPanel panel)
+        protected MainPanel mainPanel;
+        protected MessagePanel msgPanel;
+        public WorkLogic(MainPanel main, MessagePanel message)
         {
-            this.panel = panel;
+            mainPanel = main;
+            msgPanel = message;
         }
         public abstract void Draw();
         public abstract void Action();

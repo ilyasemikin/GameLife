@@ -21,10 +21,10 @@ namespace GameLife
         private int MaxLineLength { get; set; }
         private int CurrentLine { get; set; }
         private int CountLines { get => Text.Length; }
-        private int Width { get => panel.Width; }
-        private int Height { get => panel.Height; }
+        private int Width { get => mainPanel.Width; }
+        private int Height { get => mainPanel.Height; }
         private int Indent { get; set; }
-        public TextOutLogic(MainPanel output) : base(output)
+        public TextOutLogic(MainPanel output, MessagePanel message) : base(output, message)
         {
             CurrentLine = 0;
         }
@@ -79,7 +79,7 @@ namespace GameLife
                 var line = Text[i];
                 line = (line.Length < Indent) ? "" : line.Substring(Indent);
                 for (int x = 0; x < Width; x++)
-                    panel.SetChar(x, y, (x < line.Length) ? line[x] : panel.Space);
+                    mainPanel.SetChar(x, y, (x < line.Length) ? line[x] : mainPanel.Space);
                 y++;
             }
         }

@@ -13,9 +13,19 @@ namespace GameLife
         private MainPanel mainPanel;
         private MessagePanel messagePanel;
         private ReadPanel readPanel;
-        private WorkLogic logic;
+        public WorkLogic Logic { get; private set; }
         private CommandHandler commandHandler;
-        private bool Exit { get; set; }
+        private List<string> _exitCommands;
+        public List<string> ExitCommands
+        {
+            get => _exitCommands;
+            set
+            {
+                if (value == null || value.Count == 0)
+                    throw new ArgumentException();
+                _exitCommands = value;
+            }
+        }
         public int MinWidth { get; set; }
         public int MinHeight { get; set; }
         public int Width { get => output.Width; }
@@ -30,12 +40,15 @@ namespace GameLife
         }
         public GameScene(MainPanel main, MessagePanel message, ReadPanel read, WorkLogic logic, OutputMatrix output)
         {
-            Exit = false;
             MinWidth = MinHeight = 20;
             mainPanel = main;
             messagePanel = message;
             readPanel = read;
-            this.logic = logic;
+            ExitCommands = new List<string>()
+            {
+                "q"
+            };
+            Logic = logic;
             this.output = output;
             var availableCommands = GetCommandEvents();
             commandHandler = new CommandHandler(availableCommands);
@@ -81,25 +94,15 @@ namespace GameLife
             foreach (var item in added)
                 ret.Add(item.Key, item.Value);
         }
-        void CommandEvent_Exit(string[] argv)
-        {
-            if (CommandsFunctions.IsCorrectParams(argv, 0))
-                Exit = true;
-        }
         public Dictionary<string, CommandEventDescription> GetCommandEvents()
         {
-            var type = GetType();
-            var ret = new Dictionary<string, CommandEventDescription>()
-            {
-                { "exit", new CommandEventDescription("", CommandEvent_Exit) },
-                { "quit", new CommandEventDescription("", CommandEvent_Exit) },
-                { "q", new CommandEventDescription("", CommandEvent_Exit) },
-            };
-            AddRangeDictionary(ret, logic.GetCommandEvents());
+            var ret = new Dictionary<string, CommandEventDescription>();
+            AddRangeDictionary(ret, Logic.GetCommandEvents());
             return ret;
         }
-        public void Run()
+        public string Run()
         {
+            string[] words;
             do
             {
                 while (!Console.KeyAvailable)
@@ -112,9 +115,9 @@ namespace GameLife
                     Clear();
                     if (HasMinimalSize())
                     {
-                        logic.Draw();
+                        Logic.Draw();
                         Write();
-                        logic.Action();
+                        Logic.Action();
                     }
                     else
                     {
@@ -128,16 +131,20 @@ namespace GameLife
                 var input = readPanel.Read();
                 if (input != null)
                 {
+                    words = input.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (ExitCommands.Contains(words[0]))
+                        break;
                     try
                     {
-                        commandHandler.TryParseCommand(input);
+                        commandHandler.TryParseCommand(words);
                     }
                     catch (Exception e)
                     {
                         messagePanel.Message = new GameMessage(e.Message, ConsoleColor.Red, ConsoleColor.White, 20);
                     }
                 }
-            } while (!Exit);
+            } while (true);
+            return words[0];
         }
     }
 }

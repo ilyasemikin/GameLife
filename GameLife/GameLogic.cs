@@ -12,9 +12,9 @@ namespace GameLife
         private List<CellPoint> cells;
         private char CellPointSymbol { get; set; }
         private bool StopGame { get; set; }
-        private int Width { get => panel.Width; }
-        private int Height { get => panel.Height; }
-        public GameLogic(MainPanel main) : base(main)
+        private int Width { get => mainPanel.Width; }
+        private int Height { get => mainPanel.Height; }
+        public GameLogic(MainPanel main, MessagePanel message) : base(main, message)
         {
             CellPointSymbol = '*';
             StopGame = false;
@@ -100,8 +100,16 @@ namespace GameLife
                 var name = argv[1];
                 var point = CommandsFunctions.ParseCellPoints(argv, 2, argv.Length)[0];
                 var figureDots = GameFigures.SearchFigure(name).Select(x => (x.Item1 + point.X, x.Item2 + point.Y));
+                var allDotsCorrect = true;
                 foreach (var dot in figureDots)
-                    AddLivingCell(new CellPoint(dot.Item1, dot.Item2));
+                    if (!IsCorrectCoordinate(dot.Item1, dot.Item2))
+                    {
+                        allDotsCorrect = false;
+                        break;
+                    }
+                if (allDotsCorrect)
+                    foreach (var dot in figureDots) 
+                        AddLivingCell(new CellPoint(dot.Item1, dot.Item2));
             }
         }
         private void CommandEvent_Start(string[] argv)
@@ -143,7 +151,7 @@ namespace GameLife
                     ClearField();
                     throw new WindowSizeChangedException("Cell point can't displayed. Clear field");
                 }
-                panel.SetChar(cell.X, cell.Y, CellPointSymbol);
+                mainPanel.SetChar(cell.X, cell.Y, CellPointSymbol);
             }
         }
         public override void Action()

@@ -13,12 +13,11 @@ namespace GameLife
         {
             availableCommands = commands;
         }
-        public void TryParseCommand(string input)
+        public void TryParseCommand(string[] input)
         {
-            var words = input.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            var command = words[0];
+            var command = input[0];
             if (availableCommands.ContainsKey(command))
-                availableCommands[command].func(words);
+                availableCommands[command].func(input);
             else
                 throw new UnknownCommandException($"Unknown command: {command}");
         }
