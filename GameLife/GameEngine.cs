@@ -26,6 +26,7 @@ namespace GameLife
             {
                 { "help", new CommandEventDescription("", CommandEvent_Help) },
                 { "about", new CommandEventDescription("", CommandEvent_About) },
+                { "figures", new CommandEventDescription("", CommandEvent_Figures) },
                 { "exit", new CommandEventDescription("", CommandEvent_Exit) },
                 { "quit", new CommandEventDescription("", CommandEvent_Exit) },
                 { "q", new CommandEventDescription("", CommandEvent_Exit) },
@@ -73,11 +74,19 @@ namespace GameLife
         }
         private static void CommandEvent_About(string[] argv)
         {
-
+            var text = new string[]
+            {
+                ""
+            };
+            ((TextOutLogic)textScene.Logic).Text = text;
+            currentGameScene = textScene;
         }
-        private static void CommandEvent_Exit(string[] argv)
+        private static void CommandEvent_Exit(string[] argv) => Exit = true;
+        private static void CommandEvent_Figures(string[] argv)
         {
-            Exit = true;
+            var text = GameFigures.GetListFigures().ToArray();
+            ((TextOutLogic)textScene.Logic).Text = text;
+            currentGameScene = textScene;
         }
         public static void Run()
         {

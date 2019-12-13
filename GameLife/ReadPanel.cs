@@ -13,9 +13,9 @@ namespace GameLife
         }
         public override void Write()
         {
-            Console.SetCursorPosition(X, Y);
+            Console.SetCursorPosition(X + Width - 2, Y);
             Console.Write(output.GetChar(X + Width - 1, Y));
-            Console.MoveBufferArea(X, Y, 1, 1, X + Width - 1, Y);
+            Console.MoveBufferArea(X + Width - 2, Y, 1, 1, X + Width - 1, Y);
             Console.SetCursorPosition(X, Y);
             Console.Write(output.GetLine(Y, X, X + Width - 1));
             Console.SetCursorPosition(0, 0);

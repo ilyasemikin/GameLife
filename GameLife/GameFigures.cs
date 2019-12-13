@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace GameLife
@@ -11,6 +12,7 @@ namespace GameLife
         {
             figures = new Dictionary<string, (int, int)[]>();
         }
+        public static List<string> GetListFigures() => figures.Select(x => x.Key).ToList();
         public static int GetFiguresFromFile(string filename)
         {
             // Maybe need refactoring
