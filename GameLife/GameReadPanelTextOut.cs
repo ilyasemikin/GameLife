@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameLife
 {
@@ -31,7 +27,7 @@ namespace GameLife
         public override string Read()
         {
             var c = Console.ReadKey(true);
-            switch(c.Key)
+            switch (c.Key)
             {
                 case ConsoleKey.DownArrow:
                     return "arrow_down";

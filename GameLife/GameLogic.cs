@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static System.Math;
 
 namespace GameLife
@@ -100,16 +98,15 @@ namespace GameLife
                 var name = argv[1];
                 var point = CommandsFunctions.ParseCellPoints(argv, 2, argv.Length)[0];
                 var figureDots = GameFigures.SearchFigure(name).Select(x => (x.Item1 + point.X, x.Item2 + point.Y));
-                var allDotsCorrect = true;
                 foreach (var dot in figureDots)
                     if (!IsCorrectCoordinate(dot.Item1, dot.Item2))
-                    {
-                        allDotsCorrect = false;
                         break;
-                    }
-                if (allDotsCorrect)
-                    foreach (var dot in figureDots) 
-                        AddLivingCell(new CellPoint(dot.Item1, dot.Item2));
+                foreach (var dot in figureDots)
+                {
+                    var x = dot.Item1 % Width;
+                    var y = dot.Item2 % Height;
+                    AddLivingCell(new CellPoint(x, y));
+                }
             }
         }
         private void CommandEvent_Start(string[] argv)
@@ -121,7 +118,6 @@ namespace GameLife
         {
             if (CommandsFunctions.IsCorrectParams(argv, 0))
                 StopGame = true;
-
         }
         private void CommandEvent_Clear(string[] argv)
         {

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameLife
 {
@@ -14,7 +10,7 @@ namespace GameLife
             : base($"{(command == null ? "" : command + ": ")}expected {(comprasion == Comprasion.MORE ? ">" : "")}{expected} parametrs, " +
                   $"but get {received}")
         {
-        
+
         }
         public CountCommandParamsException(int expected, int received, Comprasion comprasion = Comprasion.EQUALS)
             : this(null, expected, received, comprasion)
