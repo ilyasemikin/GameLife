@@ -38,7 +38,7 @@ namespace GameLife
             {
                 var index = startIndex + 2 * i;
                 if (!int.TryParse(argv[index], out int x) || !int.TryParse(argv[index + 1], out int y))
-                    throw new ArgumentException($"(x = {argv[index]}), y = {argv[index + 1]}");
+                    throw new ArgumentException($"Incorrect coordinate");
                 ret[i] = new CellPoint(x, y);
             }
             return ret;

@@ -97,10 +97,10 @@ namespace GameLife
             {
                 var name = argv[1];
                 var point = CommandsFunctions.ParseCellPoints(argv, 2, argv.Length)[0];
-                var figureDots = GameFigures.SearchFigure(name).Select(x => (x.Item1 + point.X, x.Item2 + point.Y));
-                foreach (var dot in figureDots)
-                    if (!IsCorrectCoordinate(dot.Item1, dot.Item2))
-                        break;
+                var foundFigure = GameFigures.SearchFigure(name);
+                if (foundFigure == null)
+                    throw new FigureNotFoundException(name);
+                var figureDots = foundFigure.Select(x => (x.Item1 + point.X, x.Item2 + point.Y));
                 foreach (var dot in figureDots)
                 {
                     var x = dot.Item1 % Width;

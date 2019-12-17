@@ -59,7 +59,7 @@ namespace GameLife
             var fileTypes = new Dictionary<string, Action<string>>()
             {
                 { ".cells", ParsePlaintextFile },
-                //{ "rle",  ParseRLEFile },
+                //{ ".rle",  ParseRLEFile },
             };
             foreach (var filePath in Directory.GetFiles(path))
             {
