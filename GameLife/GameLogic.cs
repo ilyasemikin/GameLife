@@ -86,7 +86,7 @@ namespace GameLife
             if (CommandsFunctions.IsCorrectMinParams(argv, 2))
                 AddLivingCells(CommandsFunctions.ParseCellPoints(argv, 1, argv.Length));
         }
-        private void CommandEvent_DeleteCells(string[] argv)
+        private void CommandEvent_RemoveCells(string[] argv)
         {
             if (CommandsFunctions.IsCorrectMinParams(argv, 2))
                 AddLivingCells(CommandsFunctions.ParseCellPoints(argv, 1, argv.Length));
@@ -126,15 +126,40 @@ namespace GameLife
         }
         public override Dictionary<string, CommandEventDescription> GetCommandEvents()
         {
-            var emptyString = new string[0];
+            var addDesc = new string[]
+            {
+                "add of living cells",
+                "usage: add x1 y1 x2 y2 . . .",
+            };
+            var removeDesc = new string[] {
+                "remove of living cells",
+                "usage: remove x1 y1 x2 y2 . . .",
+            };
+            var placeDesc = new string[]
+            {
+                "place figure",
+                "usage: place {figure name} x y",
+            };
+            var startDesc = new string[]
+            {
+                "start game"
+            };
+            var stopDesc = new string[]
+            {
+                "stop game"
+            };
+            var clearDesc = new string[]
+            {
+                "clear game field"
+            };
             var ret = new Dictionary<string, CommandEventDescription>()
             {
-                { "add", new CommandEventDescription(emptyString, CommandEvent_AddCells) },
-                { "delete", new CommandEventDescription(emptyString, CommandEvent_DeleteCells) },
-                { "place", new CommandEventDescription(emptyString, CommandEvent_PlaceFigure) },
-                { "start", new CommandEventDescription(emptyString, CommandEvent_Start) },
-                { "stop", new CommandEventDescription(emptyString, CommandEvent_Stop) },
-                { "clear", new CommandEventDescription(emptyString, CommandEvent_Clear) }
+                { "add", new CommandEventDescription(addDesc, CommandEvent_AddCells) },
+                { "remove", new CommandEventDescription(removeDesc, CommandEvent_RemoveCells) },
+                { "place", new CommandEventDescription(placeDesc, CommandEvent_PlaceFigure) },
+                { "start", new CommandEventDescription(startDesc, CommandEvent_Start) },
+                { "stop", new CommandEventDescription(stopDesc, CommandEvent_Stop) },
+                { "clear", new CommandEventDescription(clearDesc, CommandEvent_Clear) },
             };
             return ret;
         }

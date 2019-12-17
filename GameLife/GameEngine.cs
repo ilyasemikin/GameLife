@@ -22,15 +22,30 @@ namespace GameLife
         }
         private static void InitCommands()
         {
-            var emptyStrings = new string[0];
+            var helpDesc = new string[]
+            {
+                "show command descriptions",
+            };
+            var aboutDesc = new string[]
+            {
+                "show information about program",
+            };
+            var figuresDesc = new string[]
+            {
+                "show available figures",
+            };
+            var exitDesc = new string[]
+            {
+                "exit from program",
+            };
             commands = new Dictionary<string, CommandEventDescription>()
             {
-                { "help", new CommandEventDescription(emptyStrings, CommandEvent_Help) },
-                { "about", new CommandEventDescription(emptyStrings, CommandEvent_About) },
-                { "figures", new CommandEventDescription(emptyStrings, CommandEvent_Figures) },
-                { "exit", new CommandEventDescription(emptyStrings, CommandEvent_Exit) },
-                { "quit", new CommandEventDescription(emptyStrings, CommandEvent_Exit) },
-                { "q", new CommandEventDescription(emptyStrings, CommandEvent_Exit) },
+                { "help", new CommandEventDescription(helpDesc, CommandEvent_Help) },
+                { "about", new CommandEventDescription(aboutDesc, CommandEvent_About) },
+                { "figures", new CommandEventDescription(figuresDesc, CommandEvent_Figures) },
+                { "exit", new CommandEventDescription(exitDesc, CommandEvent_Exit) },
+                { "quit", new CommandEventDescription(exitDesc, CommandEvent_Exit) },
+                { "q", new CommandEventDescription(exitDesc, CommandEvent_Exit) },
             };
         }
         private static void InitScenes()
@@ -64,7 +79,15 @@ namespace GameLife
         }
         private static List<string> GetListCommandsDescriptions(Dictionary<string, CommandEventDescription> dict)
         {
-            return dict.Select(x => x.Key + " - " + x.Value.description).ToList();
+            var ret = new List<string>();
+            foreach (var item in dict)
+            {
+                var desc = item.Value.description;
+                ret.Add(item.Key + " - " + (desc.Length == 0 ? "" : desc[0]));
+                for (int i = 1; i < desc.Length; i++)
+                    ret.Add("    " + desc[i]);
+            }
+            return ret;
         }
         private static void CommandEvent_Help(string[] argv)
         {
