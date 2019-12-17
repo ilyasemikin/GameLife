@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -39,7 +40,8 @@ namespace GameLife
                         dots.Add((n1, n2));
                         dotsMatch = dotsMatch.NextMatch();
                     }
-                    figures.Add(figure, dots.ToArray());
+                    if (!figures.ContainsKey(figure))
+                        figures.Add(figure, dots.ToArray());
                     ret++;
                 }
                 else
@@ -49,6 +51,45 @@ namespace GameLife
                 }
             }
             return ret;
+        }
+        public static void GetFiguresFromDirectory(string path)
+        {
+            if (!Directory.Exists(path))
+                throw new DirectoryNotFoundException($"Directory not found {path}");
+            var fileTypes = new Dictionary<string, Action<string>>()
+            {
+                { ".cells", ParsePlaintextFile },
+                //{ "rle",  ParseRLEFile },
+            };
+            foreach (var filePath in Directory.GetFiles(path))
+            {
+                var fileExt = Path.GetExtension(filePath).ToLower();
+                if (fileTypes.ContainsKey(fileExt))
+                    fileTypes[fileExt](filePath);
+            }
+        }
+        private static void ParsePlaintextFile(string path)
+        {
+            if (!File.Exists(path))
+                throw new FileNotFoundException("", path);
+            var ret = new List<(int, int)>();
+            int lineNumber = 0;
+            foreach (var line in File.ReadAllLines(path))
+            {
+                if (line.Length == 0 || line[0] == '!')
+                    continue;
+                for (int i = 0; i < line.Length; i++)
+                    if (line[i] == 'O')
+                        ret.Add((i, lineNumber));
+                lineNumber++;
+            }
+            var name = Path.GetFileNameWithoutExtension(path);
+            if (!figures.ContainsKey(name))
+                figures.Add(name, ret.ToArray());
+        }
+        private static void ParseRLEFile(string path)
+        {
+
         }
         public static (int, int)[] SearchFigure(string figure)
         {

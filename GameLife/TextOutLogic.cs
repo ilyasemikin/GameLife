@@ -13,7 +13,7 @@ namespace GameLife
             set
             {
                 _text = value;
-                MaxLineLength = value.Select(x => x.Length).Max();
+                MaxLineLength = (value.Length == 0) ? 0 : value.Select(x => x.Length).Max();
             }
         }
         private int MaxLineLength { get; set; }
@@ -58,12 +58,13 @@ namespace GameLife
         }
         public override Dictionary<string, CommandEventDescription> GetCommandEvents()
         {
+            var emptyString = new string[0];
             var ret = new Dictionary<string, CommandEventDescription>()
             {
-                { "arrow_up", new CommandEventDescription("", CommandEvent_Up) },
-                { "arrow_down", new CommandEventDescription("", CommandEvent_Down) },
-                { "arrow_left", new CommandEventDescription("", CommandEvent_Left) },
-                { "arrow_right", new CommandEventDescription("", CommandEvent_Right) },
+                { "arrow_up", new CommandEventDescription(emptyString, CommandEvent_Up) },
+                { "arrow_down", new CommandEventDescription(emptyString, CommandEvent_Down) },
+                { "arrow_left", new CommandEventDescription(emptyString, CommandEvent_Left) },
+                { "arrow_right", new CommandEventDescription(emptyString, CommandEvent_Right) },
             };
             return ret;
         }
@@ -80,7 +81,9 @@ namespace GameLife
                     mainPanel.SetChar(x, y, (x < line.Length) ? line[x] : mainPanel.Space);
                 y++;
             }
-            var textMessage = $"Line ({CurrentLine + 1}-{(CurrentLine + CountLines < Height ? CountLines : Height)})/{CountLines}";
+            var upperBorder = (CountLines == 0) ? 0 : CurrentLine + 1;
+            var lowerBorder = CurrentLine + CountLines < Height ? CountLines : Height;
+            var textMessage = $"Line ({upperBorder}-{lowerBorder})/{CountLines}";
             msgPanel.Message = new GameMessage(textMessage, ConsoleColor.DarkYellow, ConsoleColor.White, 0);
         }
         public override void Action()

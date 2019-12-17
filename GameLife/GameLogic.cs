@@ -126,15 +126,15 @@ namespace GameLife
         }
         public override Dictionary<string, CommandEventDescription> GetCommandEvents()
         {
-            var type = GetType();
+            var emptyString = new string[0];
             var ret = new Dictionary<string, CommandEventDescription>()
             {
-                { "add", new CommandEventDescription("", CommandEvent_AddCells) },
-                { "delete", new CommandEventDescription("", CommandEvent_DeleteCells) },
-                { "place", new CommandEventDescription("", CommandEvent_PlaceFigure) },
-                { "start", new CommandEventDescription("", CommandEvent_Start) },
-                { "stop", new CommandEventDescription("", CommandEvent_Stop) },
-                { "clear", new CommandEventDescription("", CommandEvent_Clear) }
+                { "add", new CommandEventDescription(emptyString, CommandEvent_AddCells) },
+                { "delete", new CommandEventDescription(emptyString, CommandEvent_DeleteCells) },
+                { "place", new CommandEventDescription(emptyString, CommandEvent_PlaceFigure) },
+                { "start", new CommandEventDescription(emptyString, CommandEvent_Start) },
+                { "stop", new CommandEventDescription(emptyString, CommandEvent_Stop) },
+                { "clear", new CommandEventDescription(emptyString, CommandEvent_Clear) }
             };
             return ret;
         }

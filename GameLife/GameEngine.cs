@@ -22,14 +22,15 @@ namespace GameLife
         }
         private static void InitCommands()
         {
+            var emptyStrings = new string[0];
             commands = new Dictionary<string, CommandEventDescription>()
             {
-                { "help", new CommandEventDescription("", CommandEvent_Help) },
-                { "about", new CommandEventDescription("", CommandEvent_About) },
-                { "figures", new CommandEventDescription("", CommandEvent_Figures) },
-                { "exit", new CommandEventDescription("", CommandEvent_Exit) },
-                { "quit", new CommandEventDescription("", CommandEvent_Exit) },
-                { "q", new CommandEventDescription("", CommandEvent_Exit) },
+                { "help", new CommandEventDescription(emptyStrings, CommandEvent_Help) },
+                { "about", new CommandEventDescription(emptyStrings, CommandEvent_About) },
+                { "figures", new CommandEventDescription(emptyStrings, CommandEvent_Figures) },
+                { "exit", new CommandEventDescription(emptyStrings, CommandEvent_Exit) },
+                { "quit", new CommandEventDescription(emptyStrings, CommandEvent_Exit) },
+                { "q", new CommandEventDescription(emptyStrings, CommandEvent_Exit) },
             };
         }
         private static void InitScenes()
