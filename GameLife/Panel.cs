@@ -10,15 +10,16 @@ namespace GameLife
         public int Y { get; set; }
         public abstract int Width { get; set; }
         public abstract int Height { get; set; }
-        public virtual void Write()
+        protected void WritePart(int x, int width)
         {
             for (int y = Y; y < Y + Height; y++)
             {
-                Console.SetCursorPosition(X, y);
-                Console.Write(output.GetLine(y, X, X + Width));
+                Console.SetCursorPosition(x, y);
+                Console.Write(output.GetLine(y, x, x + width));
                 Console.SetCursorPosition(0, 0);
             }
         }
+        public virtual void Write() => WritePart(0, Width);
         public virtual void Clear()
         {
             for (int x = X; x < X + Width; x++)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace GameLife
@@ -13,7 +14,8 @@ namespace GameLife
         {
             figures = new Dictionary<string, (int, int)[]>();
         }
-        public static List<string> GetListFigures() => figures.Select(x => x.Key).ToList();
+        public static List<string> GetListNamesFigures() => figures.Select(x => x.Key).ToList();
+        public static Dictionary<string, (int, int)[]> GetListFigures() => figures;
         public static int GetFiguresFromFile(string filename)
         {
             // Maybe need refactoring
@@ -89,7 +91,15 @@ namespace GameLife
         }
         private static void ParseRLEFile(string path)
         {
-
+            if (!File.Exists(path))
+                throw new FileNotFoundException("", path);
+            var figure = new StringBuilder();
+            foreach (var line in File.ReadAllLines(path))
+            {
+                if (line.Length == 0 || line[0] == '#')
+                    continue;
+                
+            }
         }
         public static (int, int)[] SearchFigure(string figure)
         {

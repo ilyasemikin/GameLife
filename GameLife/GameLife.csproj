@@ -50,13 +50,16 @@
     <Compile Include="ConsoleFunctions.cs" />
     <Compile Include="CountCommandParamsException.cs" />
     <Compile Include="FigureNotFoundException.cs" />
+    <Compile Include="FiguresLogic.cs" />
     <Compile Include="FileStringParseException.cs" />
     <Compile Include="GameEngine.cs" />
     <Compile Include="GameFigures.cs" />
     <Compile Include="GameLogic.cs" />
     <Compile Include="GameMessage.cs" />
+    <Compile Include="GamePanelFigures.cs" />
     <Compile Include="GamePanelTextOut.cs" />
     <Compile Include="GamePanelPermanentMessage.cs" />
+    <Compile Include="GameReadPanelFigures.cs" />
     <Compile Include="GameReadPanelTextOut.cs" />
     <Compile Include="GameScene.cs" />
     <Compile Include="ICommandEvent.cs" />

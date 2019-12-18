@@ -38,6 +38,7 @@ namespace GameLife
         }
         public GameScene(MainPanel main, MessagePanel message, ReadPanel read, WorkLogic logic, OutputMatrix output)
         {
+            Console.SetWindowSize(100, 30);
             MinWidth = MinHeight = 20;
             mainPanel = main;
             messagePanel = message;

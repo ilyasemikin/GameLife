@@ -10,6 +10,7 @@ namespace GameLife
         private static GameScene currentGameScene;
         private static GameScene mainScene;
         private static GameScene textScene;
+        private static GameScene figureScene;
         private static Dictionary<string, CommandEventDescription> commands;
         private static bool Exit { get; set; }
         static GameEngine()
@@ -52,6 +53,7 @@ namespace GameLife
         {
             InitMainScene();
             InitInfoScene();
+            InitFigureScene();
         }
         private static void InitMainScene()
         {
@@ -73,6 +75,17 @@ namespace GameLife
             var read = new GameReadPanelTextOut(output);
             var logic = new TextOutLogic(main, msg);
             textScene = new GameScene(main, msg, read, logic, output)
+            {
+                Latency = 0,
+            };
+        }
+        private static void InitFigureScene()
+        {
+            var main = new GamePanelFigures(output);
+            var msg = new GamePanelPermanentMessage(output);
+            var read = new GameReadPanelFigures(output);
+            var logic = new FiguresLogic(main, msg);
+            figureScene = new GameScene(main, msg, read, logic, output)
             {
                 Latency = 0,
             };
@@ -108,9 +121,9 @@ namespace GameLife
         private static void CommandEvent_Exit(string[] argv) => Exit = true;
         private static void CommandEvent_Figures(string[] argv)
         {
-            var text = GameFigures.GetListFigures().ToArray();
-            ((TextOutLogic)textScene.Logic).Text = text;
-            currentGameScene = textScene;
+            foreach (var figure in GameFigures.GetListFigures())
+                ((FiguresLogic)figureScene.Logic).AddFigure(figure.Key, figure.Value);
+            currentGameScene = figureScene;
         }
         public static void Run()
         {

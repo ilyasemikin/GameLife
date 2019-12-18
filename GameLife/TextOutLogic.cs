@@ -35,26 +35,20 @@ namespace GameLife
         private void CommandEvent_Down(string[] argv)
         {
             if (CommandsFunctions.IsCorrectParams(argv, 0))
-            {
                 if (CountLines - CurrentLine > Height)
                     CurrentLine++;
-            }
         }
         private void CommandEvent_Right(string[] argv)
         {
             if (CommandsFunctions.IsCorrectParams(argv, 0))
-            {
                 if (MaxLineLength - Indent > Width)
                     Indent++;
-            }
         }
         private void CommandEvent_Left(string[] argv)
         {
             if (CommandsFunctions.IsCorrectParams(argv, 0))
-            {
                 if (Indent > 0)
                     Indent--;
-            }
         }
         public override Dictionary<string, CommandEventDescription> GetCommandEvents()
         {
