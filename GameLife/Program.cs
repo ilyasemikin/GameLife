@@ -6,7 +6,7 @@ namespace GameLife
         static void Main()
         {
             if (File.Exists("figures_list"))
-                GameFigures.GetFiguresFromFile("figures");
+                GameFigures.GetFiguresFromFile("figures_list");
             if (Directory.Exists("figures"))
                 GameFigures.GetFiguresFromDirectory("figures");
             GameEngine.Run();

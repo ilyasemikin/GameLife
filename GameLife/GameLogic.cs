@@ -39,48 +39,41 @@ namespace GameLife
         public void ClearField() => cells.Clear();
         public void CreateNextGeneration()
         {
-            SetCountNeightborsCells(cells);
-            var nextGeneratironCells = cells.Where(x => x.CountNeighbors == 2 || x.CountNeighbors == 3)
-                                            .ToList();
+            var nextGenCells = new List<CellPoint>();
+            var field = new bool[Width, Height];
             foreach (var cell in cells)
-            {
-                var offsets = new (int, int)[] { (-1, -1), (0, -1), (1, -1), (-1, 0), (1, 0), (-1, 1), (0, 1), (1, 1) };
-                for (int i = 0; i < offsets.Length; i++)
+                field[cell.X, cell.Y] = true;
+            for (int x = 0; x < Width; x++)
+                for (int y = 0; y < Height; y++)
                 {
-                    var anotherCell = new CellPoint(cell.X + offsets[i].Item1, cell.Y + offsets[i].Item2);
-                    if (anotherCell.X == -1 || anotherCell.X == Width)
-                        anotherCell.X = Width - Abs(anotherCell.X);
-                    if (anotherCell.Y == -1 || anotherCell.Y == Height)
-                        anotherCell.Y = Height - Abs(anotherCell.Y);
-                    CalculateCountNeightborsCell(cells, anotherCell);
-                    if (anotherCell.CountNeighbors == 3 && !nextGeneratironCells.Contains(anotherCell))
-                        nextGeneratironCells.Add(anotherCell);
+                    var countNeight = CalculateCountNeightborsCell(field, x, y);
+                    if (field[x, y] && (countNeight == 2 || countNeight == 3))
+                        nextGenCells.Add(new CellPoint(x, y));
+                    if (countNeight == 3)
+                        nextGenCells.Add(new CellPoint(x, y));
                 }
-            }
-            cells = nextGeneratironCells;
+            cells = nextGenCells;
         }
-        private void SetCountNeightborsCells(List<CellPoint> cells)
+        public int CalculateCountNeightborsCell(bool[,] field, int x, int y)
         {
-            foreach (var cell in cells)
-                cell.CountNeighbors = CalculateCountNeightborsCell(cells, cell);
+            var ret = 0;
+            for (int dx = -1; dx <= 1; dx++)
+                for (int dy = -1; dy <= 1; dy++)
+                {
+                    if (dx == 0 && dy == 0)
+                        continue;
+                    var cx = x + dx;
+                    var cy = y + dy;
+                    if (cx < 0 || cx == Width)
+                        cx = Width - Abs(cx);
+                    if (cy < 0 || cy == Height)
+                        cy = Height - Abs(cy);
+                    if (field[cx, cy])
+                        ret++;
+                }
+            return ret;
         }
-        private int CalculateCountNeightborsCell(List<CellPoint> cells, CellPoint cell)
-        {
-            Func<CellPoint, bool> onCenter = (x => Abs(cell.X - x.X) <= 1 && Abs(cell.Y - x.Y) <= 1);
-            Func<CellPoint, bool> onLRBorder = (x => Abs(cell.X - x.X) == Width - 1 && Abs(cell.Y - x.Y) <= 1);
-            Func<CellPoint, bool> onTBBorder = (x => Abs(cell.X - x.X) <= 1 && Abs(cell.Y - x.Y) == Height - 1);
-            Func<CellPoint, bool> onCorner = (x => Abs(cell.X - x.X) == Width - 1 && Abs(cell.Y - x.Y) == Height - 1);
 
-            if (cell.X == 0 || cell.X == Width - 1 || cell.Y == 0 || cell.Y == Height - 1)
-                cell.CountNeighbors = cells.Where(x => onCenter(x) || onLRBorder(x) || onTBBorder(x) || onCorner(x))
-                                           .Count();
-            else
-                cell.CountNeighbors = cells.Where(x => onCenter(x))
-                                           .Count();
-            if (cells.Contains(cell))
-                --cell.CountNeighbors;
-            return cell.CountNeighbors;
-        }
         private void CommandEvent_AddCells(string[] argv)
         {
             if (CommandsFunctions.IsCorrectMinParams(argv, 2))
